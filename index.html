@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html ng-app="marsWeather">	
+	<head>
+		<title>Meanwhile on Mars...</title>
+		<meta charset="UTF-8">
+		<style type="text/css">
+		h2 {
+			font-size: 15px;
+		}
+		</style>
+	</head>
+	
+	<body>
+	
+	<div ng-controller="weatherController">
+		<h1>Meanwhile on Mars...</h1>
+		<h2>Real-time weather data from the Curiosity Rover!</h2>
+		The API refreshed {{test}} times
+		<p>
+		Sol {{weather.report.sol}} <br>
+		Earth date:  {{weather.report.terrestrial_date | date}}<br>
+		Solar latitude [season]: Month {{weather.report.ls}}<br>
+		Weather: {{weather.report.atmo_opacity}}<br>
+		Wind speed: {{weather.report.wind_speed || 'null' }}<br>
+		Sunrise: {{weather.report.sunrise |date:'mediumTime'}}<br>
+		Sunset: {{weather.report.sunset|date:'mediumTime'}}
+		</p>
+	</div>
+
+	<footer>
+	Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
+	</footer>
+	
+	<script src="angular.min.js"></script>
+	<script src="angular-route.min.js"></script>
+	<script src="app.js"></script>
+	</body>
+</HTML>
