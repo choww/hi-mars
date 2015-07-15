@@ -3,28 +3,26 @@
 	<head>
 		<title>Meanwhile on Mars...</title>
 		<meta charset="UTF-8">
-		<style type="text/css">
-		h2 {
-			font-size: 15px;
-		}
-		</style>
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	
 	<body>
 	
-	<div ng-controller="weatherController">
+	<header>
 		<h1>Meanwhile on Mars...</h1>
 		<h2>Real-time weather data from the Curiosity Rover!</h2>
-		The API refreshed {{test}} times
-		<p>
-		Sol {{weather.report.sol}} <br>
-		Earth date:  {{weather.report.terrestrial_date | date}}<br>
-		Solar latitude [season]: Month {{weather.report.ls}}<br>
-		Weather: {{weather.report.atmo_opacity}}<br>
-		Wind speed: {{weather.report.wind_speed || 'null' }}<br>
-		Sunrise: {{weather.report.sunrise |date:'mediumTime'}}<br>
-		Sunset: {{weather.report.sunset|date:'mediumTime'}}
-		</p>
+	</header>
+	<div class="content" ng-controller="weatherController">
+		This API refreshed {{test}} times
+
+			<weather-data ng-show="weather.loaded">
+			</weather-data>
+			<div class="loading" ng-show="!weather.loaded">
+				Loading...
+			</div>
+			<div class="load-error" ng-show="weather.loadError">
+				Error: Please check your internet connection or refresh the page!
+			</div>			
 	</div>
 
 	<footer>

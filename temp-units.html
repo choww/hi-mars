@@ -1,0 +1,9 @@
+Temperature (<a href ng-click="chooseUnit('celsius')">&deg;C</a> | <a href ng-click="chooseUnit('fahrenheit')">&deg;F</a>): 
+<div ng-show="showUnit('celsius')">
+	Min: {{weather.report.min_temp}} &deg;C; 
+	Max: {{weather.report.max_temp}} &deg;C<br>
+</div> 
+<div ng-show="showUnit('fahrenheit')">
+	Min: {{weather.report.min_temp_fahrenheit}} &deg;F;
+	Max:{{weather.report.max_temp_fahrenheit}} &deg;F<br>
+</div>

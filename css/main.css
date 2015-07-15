@@ -1,0 +1,73 @@
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+/**** GLOBAL ****/
+body {
+  margin: 0px;
+  @outer-container ($local-max-width: $max-width);
+  background-color: #AE540C;
+  color: #1111111;
+  font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
+
+h1 {
+  font-size: 36px;
+  color: #973603; }
+
+h2 {
+  font-size: 22px;
+  color: #A41D03; }
+
+/**** HEADER ****/
+header {
+  background-color: #DB7908;
+  background-image: -webkit-linear-gradient(top, #DB7908 50%, #df8621 100%);
+  background-image: linear-gradient(to bottom,#DB7908 50%, #df8621 100%);
+  margin-top: 0;
+  padding-top: 20%;
+  padding-bottom: 5%;
+  text-align: center;
+  background-color: #DB7908; }
+
+/**** TEXT STYLES ***/
+/**** MAIN CONTENT ****/
+.content {
+  font-size: 20px;
+  margin: 15px 20px;
+  text-align: center; }
+
+/**** FOOTER ****/
+footer {
+  clear: both;
+  margin: 15px 20px; }
+
+/**** LINKS ****/
+a:link, a:visited, a:active {
+  color: #973603;
+  text-decoration: none; }
+
+a:hover {
+  color: #973603;
+  font-variant: small-caps;
+  text-decoration: none; }
+
+/**** MISC CLASSES ****/
+.loading {
+  font-size: 26px;
+  font-weight: 600;
+  color: #222;
+  padding: 10px;
+  margin: auto; }
+
+/**** ERROR-RELATED CLASSES ****/
+.load-error {
+  background-color: #d79a86;
+  border: #AE350C solid 1px;
+  padding: 10px;
+  text-align: center;
+  margin: auto;
+  font-size: 20px; }
+
+/*# sourceMappingURL=main.css.map */

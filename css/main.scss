@@ -1,0 +1,98 @@
+@import 'bourbon/bourbon';
+@import 'neat/neat';
+
+
+$light-sky-brown: #DB7908;
+$lighter-sky-brown: tint($light-sky-brown, 10%);
+$sandy-brown: #AE540C;
+$shadow-brown: #973603;
+$planet-red: #AE350C;
+$dark-red: #A41D03; 
+
+
+/**** GLOBAL ****/
+body { 
+	margin: 0px;
+	@outer-container($local-max-width: $max-width);
+	background-color: $sandy-brown;
+	color: #1111111;
+	font-family: $helvetica;
+
+}
+
+h1 {
+	font-size: 36px;
+	color: $shadow-brown;
+}
+
+h2 {
+	font-size: 22px;
+	color: $dark-red;
+}
+
+/**** HEADER ****/
+header {
+	@include linear-gradient(to bottom, $light-sky-brown 50%, $lighter-sky-brown 100%);
+	margin-top: 0;
+	padding-top: 20%;
+	padding-bottom: 5%;
+	text-align:center;
+	background-color:$light-sky-brown;
+
+}
+
+/**** TEXT STYLES ***/
+
+strong {}
+
+
+em {}
+
+/**** MAIN CONTENT ****/
+
+.content {
+	font-size: 20px;
+	margin: 15px 20px;
+	text-align:center;
+}
+
+/**** FOOTER ****/
+footer {
+	clear:both;
+	margin: 15px 20px;
+}
+
+/**** LINKS ****/
+a:link, a:visited, a:active {
+	color: $shadow-brown;
+	text-decoration:none;
+}
+
+a:hover {
+	color: $shadow-brown;
+	font-variant: small-caps;
+	text-decoration:none;
+}
+
+
+/**** MISC CLASSES ****/
+.loading {
+	font-size: 26px;
+	font-weight: 600;
+	color: #222;
+	padding: 10px;
+	margin: auto;
+}
+
+/**** ERROR-RELATED CLASSES ****/
+.load-error {
+	background-color: tint($planet-red, 50%);
+	border: $planet-red solid 1px;
+	padding: 10px;
+	text-align: center;
+	margin: auto;
+	font-size: 20px;	
+}
+
+
+
