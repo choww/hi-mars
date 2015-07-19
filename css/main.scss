@@ -15,7 +15,7 @@ body {
 	margin: 0px;
 	@outer-container($local-max-width: $max-width);
 	background-color: $sandy-brown;
-	color: #1111111;
+	color: shade($planet-red, 80%);
 	font-family: $helvetica;
 
 }
@@ -86,7 +86,7 @@ a:hover {
 
 /**** ERROR-RELATED CLASSES ****/
 .load-error {
-	background-color: tint($planet-red, 50%);
+	background-color: tint($planet-red, 25%);
 	border: $planet-red solid 1px;
 	padding: 10px;
 	text-align: center;

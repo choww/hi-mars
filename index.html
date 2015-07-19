@@ -3,34 +3,63 @@
 	<head>
 		<title>Meanwhile on Mars...</title>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+		<style>
+			.axis line, .axis path {
+				fill: none;
+				stroke:#000;
+				shape-rendering: crispEdges;
+			}
+
+
+			.chart rect {
+			  fill: steelblue;
+			}
+
+			.chart text {
+			  fill:white ;
+			  font: 10px sans-serif;
+			  text-anchor: end;
+			}
+
+		</style>
 	</head>
 	
 	<body>
 	
-	<header>
-		<h1>Meanwhile on Mars...</h1>
-		<h2>Real-time weather data from the Curiosity Rover!</h2>
-	</header>
-	<div class="content" ng-controller="weatherController">
-		This API refreshed {{test}} times
+		<header>
+			<h1>Meanwhile on Mars...</h1>
+			<h2>Real-time weather data from the Curiosity Rover!</h2>
+		</header>
 
-			<weather-data ng-show="weather.loaded">
-			</weather-data>
-			<div class="loading" ng-show="!weather.loaded">
+		<div class="content" ng-controller="weatherController">
+			This API refreshed {{refresh}} times<br>
+			<div class="loading" ng-show="weather.loaded === 0">
+
 				Loading...
 			</div>
-			<div class="load-error" ng-show="weather.loadError">
-				Error: Please check your internet connection or refresh the page!
-			</div>			
-	</div>
 
-	<footer>
-	Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
-	</footer>
-	
-	<script src="angular.min.js"></script>
-	<script src="angular-route.min.js"></script>
-	<script src="app.js"></script>
+			<div class="load-error" ng-show="weather.loaded === 2">
+				Connection error: Please check your internet connection or refresh the page!
+			</div>	
+			<weather-data ng-show="weather.loaded === 1">
+			</weather-data>		
+		</div>
+
+		<div ng-controller="graphController">
+			{{graphData.results[0].min_temp}}
+			<svg class="chart"></svg>
+		</div>
+
+
+		<footer>
+		Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
+		</footer>
+		
+		<script src="js/angular.min.js"></script>
+		<script src="js/angular-route.min.js"></script>
+		<script src="js/d3.min.js"></script>
+		<script src="js/app.js"></script>
+
 	</body>
 </HTML>
