@@ -5,17 +5,17 @@
 		<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 		<style>
+			path {
+				stroke: #fff;
+				stroke-width: 2;
+				fill:none;
+			}
 			.axis line, .axis path {
 				fill: none;
+				stroke-width: 1;
 				stroke:#000;
 				shape-rendering: crispEdges;
 			}
-
-
-			.chart rect {
-			  fill: steelblue;
-			}
-
 			.chart text {
 			  fill:white ;
 			  font: 10px sans-serif;
@@ -47,7 +47,6 @@
 		</div>
 
 		<div ng-controller="graphController">
-			{{graphData.results[0].min_temp}}
 			<svg class="chart"></svg>
 		</div>
 

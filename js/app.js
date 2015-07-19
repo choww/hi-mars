@@ -158,6 +158,17 @@
 					  		.style("text-anchor", "end")
 					  		.text("Min temp (C)");
 
+					var line = d3.svg.line()
+								.x(function(d) { return x(d.sol); })
+								.y(function(d) { return y(d.min_temp); })
+
+					chart.append("path")
+						.attr("class", "line")
+						.attr("d", line($scope.graphData));
+
+					/**
+					BAR GRAPH
+
 	  				// create a new class .bar here instead so we don't select the axes 
 					var bar = chart.selectAll(".bar")
 					      		.data($scope.graphData).enter();
@@ -167,6 +178,7 @@
 					    .attr("y", 0)
 					    .attr("height", function(d) { return Math.abs(y(d.min_temp));} )
 					    .attr("width", x.rangeBand());
+					**/
 
 				}).error(function(data, status) {
 					console.log('http error', status);
