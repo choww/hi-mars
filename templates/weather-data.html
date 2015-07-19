@@ -1,8 +1,7 @@
 <br>Data last transmitted on {{weather.report.terrestrial_date | date}}
 
 <p>
-Sol: {{ weather.report.sol }} <br>
-Season: {{weather.report.season}} <br>
+Sol: {{ weather.report.sol }} | <season></season><br>
 Weather: {{weather.report.atmo_opacity}} <br>
 <temp-units ng-controller="tempController">
 </temp-units>
