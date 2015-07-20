@@ -8,18 +8,45 @@
 	}]);
 
 	// API Call service
-	app.factory("APIService", function($http) {
+	app.factory("APIService", function($http, $q) {
 		var api_url;
 		var data = {};
-		data.setURL = function(url) {
-			api_url = url;
-		}
-		data.getData = function() {
+		data.getData = function(url) {
 			
-			return $http.jsonp(api_url);
+			return $http.jsonp(url);
 		}
 		return data; 
+	});
+		
+	// Get current date and 2 months prior to current date
+	app.factory("dateService", function() {
+		var dates = {};
 
+		var date = new Date();
+		dates.today = date.toJSON().slice(0,10);
+
+		var year = date.getFullYear(),
+			day = date.getDate(),
+			month = date.getMonth()+1;
+			two_mnths = month - 2;
+
+		// January minus 2 months is November, February minus 2 months is December
+		if (two_mnths <= 0) {
+			two_mnths = month + 10;
+			year -= 1;
+		}
+
+		if (day < 10) {
+			day = '0' + day;
+		}
+		if (two_mnths < 10  | month < 10) {
+			two_mnths = '0' + two_mnths;
+		}
+		if (month < 10) {
+			month = '0' + month;
+		}
+		dates.two_mnths_earlier = year+'-'+two_mnths+'-'+day;
+		return dates;
 	});
 
 	// weather data display
@@ -80,111 +107,107 @@
 
 	});
 
-	app.controller("graphController", function($scope, APIService) {
-		$scope.graphData = {};
-			// Grab dates for the API query
-		var date = new Date(),
-			today = date.toJSON().slice(0,10);
+	app.controller("graphController", function($scope, $q, APIService, dateService) {
+		$scope.agg_data = {};
 
-		// Grab the date for one year before today
-		var year = date.getFullYear(),
-			day = date.getDate(),
-			month = date.getMonth()+1;
-
-		if (day < 10) {
-			day = '0' + day;
-		}
-		if (month < 10) {
-			month = '0' + month;
-		}
-		var one_yr_earlier = (year-1)+'-'+month+'-'+day;
-		var api_url = "http://marsweather.ingenology.com/v1/archive/?terrestrial_date_end="+today+"&terrestrial_date_start="+one_yr_earlier+"&format=jsonp&callback=JSON_CALLBACK";
-
-		////////// D3JS STUFF //////////
-		var margin = {top: 40, right: 10, bottom: 10, left: 50};
-			width = 500 - margin.left - margin.right;
-		    height = 300 - margin.top - margin.bottom;
-					
-		// Use API Service 
-		function getData() {
-			APIService.setURL(api_url);
-			APIService.getData().success(function(data) {
-					$scope.graphData = data.results;
-
-					// set values for x and y axis
-					var y = d3.scale.linear()
-								.domain([d3.min($scope.graphData.map(function(d) { return d.min_temp; })), 0])
-			   					.range([height, 0])
-			   					.nice();
-
-					var x = d3.scale.ordinal()
-								.domain($scope.graphData.map(function(d) { return d.sol; }))
-								.rangeRoundBands([0,width], .05);
-	  				
-	  				// Axes
-					var xAxis = d3.svg.axis()
-									.scale(x)
-									.orient("top");
-
-					var yAxis = d3.svg.axis()
-									.scale(y)
-									.orient("left");	  				
-
-	  				// create the graph area 
-					var chart = d3.select(".chart")
-					    .attr("width", width+ margin.left + margin.right)
-					    .attr("height", height + margin.top + margin.bottom)
-					    .append("g")
-					    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-					chart.append("g")
-					  	.attr("class", "x axis")
-					  	.attr("transform", "translate(0,0)")
-					  	.call(xAxis)
-					  	// add axis label
-						.append("text")
-					  		.attr("x", (width+margin.right)/2)
-					  		.attr("y", -margin.top/2 - 10)
-					  		.text("sol");
-
-					chart.append("g")
-					  	.attr("class", "y axis")
-					  	.call(yAxis)
-					  	.append("text")
-					  		.attr("transform", "rotate(-90)")
-					  		.attr("y", -margin.left/2 - 10)
-					  		.attr("x", -height/2 + margin.top)
-					  		.attr("dy", ".71em")
-					  		.style("text-anchor", "end")
-					  		.text("Min temp (C)");
-
-					var line = d3.svg.line()
-								.x(function(d) { return x(d.sol); })
-								.y(function(d) { return y(d.min_temp); })
-
-					chart.append("path")
-						.attr("class", "line")
-						.attr("d", line($scope.graphData));
-
-					/**
-					BAR GRAPH
-
-	  				// create a new class .bar here instead so we don't select the axes 
-					var bar = chart.selectAll(".bar")
-					      		.data($scope.graphData).enter();
-					bar.append("rect")
-					  	.attr("class", "bar")
-					  	.attr("x", function(d) { return x(d.sol); })
-					    .attr("y", 0)
-					    .attr("height", function(d) { return Math.abs(y(d.min_temp));} )
-					    .attr("width", x.rangeBand());
-					**/
-
-				}).error(function(data, status) {
-					console.log('http error', status);
-				});
+		// combine data from multiple API calls into one aggregate data set.
+		var calls = [];
+		for (var num = 1; num <= 3; num++) {
+			var api_url = "http://marsweather.ingenology.com/v1/archive/?page="+num+"&terrestrial_date_end="+dateService.today+"&terrestrial_date_start="+dateService.two_mnths_earlier+"&format=jsonp&callback=JSON_CALLBACK";
+			calls.push(APIService.getData(api_url));
 		};
-		getData();
+
+		$q.all(calls).then(function(result) {
+			var results = [];
+			angular.forEach(result, function(rrr) {
+				angular.forEach(rrr, function(rr) {
+					angular.forEach(rr.results, function(r) {
+						results.push({sol: r.sol, min_temp: r.min_temp, max_temp: r.max_temp});
+					})
+				})
+			});
+			return results;
+		}).then (function(result) {
+			$scope.agg_data = result;
+			//////// D3.JS STUFF ////////
+			var margin = {top: 40, right: 10, bottom: 10, left: 50};
+			width = 1000 - margin.left - margin.right;
+		    height = 300 - margin.top - margin.bottom;
+
+		    // min y-axis value
+		    ymin = d3.min($scope.agg_data.map(function(d) { return d.min_temp; }).reverse());
+			// set values for x and y axis
+				var y = d3.scale.linear()
+							.domain([ymin, 10])
+		   					.range([height, 0])
+		   					.nice();
+
+				var x = d3.scale.ordinal()
+							.domain($scope.agg_data.map(function(d) { return d.sol; }).reverse())
+							.rangeRoundBands([0,width], .05);
+  				
+  				// Axes
+				var xAxis = d3.svg.axis()
+								.scale(x)
+								.orient("top");
+
+				var yAxis = d3.svg.axis()
+								.scale(y)
+								.orient("left");	  				
+
+  				// create the graph area 
+				var chart = d3.select(".chart")
+				    .attr("width", width+ margin.left + margin.right)
+				    .attr("height", height + margin.top + margin.bottom)
+				    .append("g")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				chart.append("g")
+				  	.attr("class", "x axis")
+				  	.attr("transform", "translate(0,0)")
+				  	.call(xAxis)
+				  	// add axis label
+					.append("text")
+				  		.attr("x", (width+margin.right)/2)
+				  		.attr("y", -margin.top *0.80)
+				  		.text("Sol");
+
+				yAxis_addons = chart.append("g")
+							  	.attr("class", "y axis")
+							  	.call(yAxis)
+				 // add a line where y = 0
+				yAxis_addons.append("line")
+				  		.attr("y1", y(0))
+				  		.attr("y2", y(0))
+				  		.attr("x1", 0)
+						.attr("x2", width)
+						.attr("stroke-dasharray", "10,10")
+				
+				yAxis_addons.append("text")
+						.attr("transform", "rotate(-90)")
+				  		.attr("y", -margin.left * 0.95)
+				  		.attr("x", -height/2 + margin.top)
+				  		.attr("dy", ".71em")
+				  		.style("text-anchor", "end")
+				  		.text("Temperature (C)");
+
+				var min_line = d3.svg.line()
+							.x(function(d) { return x(d.sol); })
+							.y(function(d) { return y(d.min_temp); })
+
+				var max_line = d3.svg.line()
+								.x(function(d) { return x(d.sol); })
+								.y(function(d) { return y(d.max_temp); })
+
+				chart.append("path")
+					.attr("class", "min_line")
+					.attr("d", min_line($scope.agg_data));
+
+				chart.append("path")
+					.attr("class", "max_line")
+					.attr("d", max_line($scope.agg_data));
+
+		});
 		
 	});
 
@@ -197,8 +220,7 @@
 		var api_url = 'http://marsweather.ingenology.com/v1/latest/?format=jsonp&callback=JSON_CALLBACK'
 
 		function getWeather() {
-			APIService.setURL(api_url);
-			APIService.getData().success(function(data) {
+			APIService.getData(api_url).success(function(data) {
 				$scope.weather = data;
 				// only load data when API query successful 
 				$scope.weather.loaded = 1;
@@ -222,6 +244,8 @@
 
 	});
 
+	angular.module('d3Graph', ['marsWeather']);
 
 
-})();
+
+}) ();

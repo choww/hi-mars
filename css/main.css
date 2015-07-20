@@ -41,7 +41,7 @@ header {
 /**** FOOTER ****/
 footer {
   clear: both;
-  margin: 15px 20px; }
+  text-align: center; }
 
 /**** LINKS ****/
 a:link, a:visited, a:active {
@@ -52,6 +52,28 @@ a:hover {
   color: #973603;
   font-variant: small-caps;
   text-decoration: none; }
+
+/**** TEMP GRAPH ****/
+path {
+  stroke-width: 2;
+  fill: none; }
+
+.min_line {
+  stroke: #df8621; }
+
+.max_line {
+  stroke: #A41D03; }
+
+.axis line, .axis path {
+  fill: none;
+  stroke-width: 1;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end; }
 
 /**** MISC CLASSES ****/
 .loading {
