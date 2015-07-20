@@ -15,7 +15,7 @@ body {
 	margin: 0px;
 	@outer-container($local-max-width: $max-width);
 	background-color: $sandy-brown;
-	color: #1111111;
+	color: shade($planet-red, 80%);
 	font-family: $helvetica;
 
 }
@@ -59,7 +59,7 @@ em {}
 /**** FOOTER ****/
 footer {
 	clear:both;
-	margin: 15px 20px;
+	text-align: center;
 }
 
 /**** LINKS ****/
@@ -74,6 +74,32 @@ a:hover {
 	text-decoration:none;
 }
 
+/**** TEMP GRAPH ****/
+
+
+path {
+	stroke-width: 2;
+	fill:none;
+}
+
+.min_line {
+	stroke: $lighter-sky-brown;
+}
+.max_line {
+	stroke: $dark-red;
+}
+.axis line, .axis path {
+	fill: none;
+	stroke-width: 1;
+	stroke:#000;
+	shape-rendering: crispEdges;
+}
+.chart text {
+  fill:white ;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
 
 /**** MISC CLASSES ****/
 .loading {
@@ -86,7 +112,7 @@ a:hover {
 
 /**** ERROR-RELATED CLASSES ****/
 .load-error {
-	background-color: tint($planet-red, 50%);
+	background-color: tint($planet-red, 25%);
 	border: $planet-red solid 1px;
 	padding: 10px;
 	text-align: center;

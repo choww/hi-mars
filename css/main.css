@@ -9,7 +9,7 @@ body {
   margin: 0px;
   @outer-container ($local-max-width: $max-width);
   background-color: #AE540C;
-  color: #1111111;
+  color: #230b02;
   font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif; }
 
 h1 {
@@ -41,7 +41,7 @@ header {
 /**** FOOTER ****/
 footer {
   clear: both;
-  margin: 15px 20px; }
+  text-align: center; }
 
 /**** LINKS ****/
 a:link, a:visited, a:active {
@@ -53,6 +53,28 @@ a:hover {
   font-variant: small-caps;
   text-decoration: none; }
 
+/**** TEMP GRAPH ****/
+path {
+  stroke-width: 2;
+  fill: none; }
+
+.min_line {
+  stroke: #df8621; }
+
+.max_line {
+  stroke: #A41D03; }
+
+.axis line, .axis path {
+  fill: none;
+  stroke-width: 1;
+  stroke: #000;
+  shape-rendering: crispEdges; }
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end; }
+
 /**** MISC CLASSES ****/
 .loading {
   font-size: 26px;
@@ -63,7 +85,7 @@ a:hover {
 
 /**** ERROR-RELATED CLASSES ****/
 .load-error {
-  background-color: #d79a86;
+  background-color: #c26849;
   border: #AE350C solid 1px;
   padding: 10px;
   text-align: center;

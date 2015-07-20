@@ -3,60 +3,51 @@
 	<head>
 		<title>Meanwhile on Mars...</title>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
-		<style>
-			.chart text {
-				fill: #fff;
-				font: 11px sans-serif;
-				text-anchor: middle;
-			}
-			path {
-				stroke: #fff;
-				stroke-width:2;
-				fill:none;
-			}
-			.axis text {
 
-				font: 11px sans-serif;
-			}
-			.axis path, .axis line {
-				fill:none;
-				stroke-width: 1;
-				stroke: #000;
-				shape-rendering: crispEdges;
-			}
-		</style>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
 	</head>
 	
 	<body>
 	
-	<header>
-		<h1>Meanwhile on Mars...</h1>
-		<h2>Real-time weather data from the Curiosity Rover!</h2>
-	</header>
-	<div class="content" ng-controller="weatherController">
-		This API refreshed {{refresh}} times
 
-			<weather-data ng-show="weather.loaded === 1">
-			</weather-data>
-			<div class="loading" ng-show="weather.loaded === 0">
-				Loading...
+		<header>
+			<h1>Meanwhile on Mars...</h1>
+			<h2>Real-time weather data from the Curiosity Rover!</h2>
+		</header>
+		<div class="content">
+			<div ng-controller="weatherController">
+				This API refreshed {{refresh}} times<br>
+				<div class="loading" ng-show="weather.loaded === 0">
+
+					Loading...
+				</div>
+
+				<div class="load-error" ng-show="weather.loaded === 2">
+					Connection error: Please check your internet connection or refresh the page!
+				</div>	
+				<weather-data ng-show="weather.loaded === 1">
+				</weather-data>		
 			</div>
-			<div class="load-error" ng-show="weather.loaded === 2">
-				Error: Please check your internet connection or refresh the page!
-			</div>			
-	</div>
 
-	<div class="graph" ng-controller="graphController">
-		<svg class="chart"></svg>
-	</div>
-	<footer>
-	Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
-	</footer>
-	
-	<script src="js/angular.min.js"></script>
-	<script src="js/angular-route.min.js"></script>
-	<script src="js/d3.min.js"></script>
-	<script src="js/app.js"></script>
+
+
+			<div ng-controller="graphController">
+				Minimum and maxium temperatures (in Celsius) over 2 Earth Months
+				<p> 
+					<svg class="chart"></svg>
+				</p>
+			</div>
+		</div>
+
+
+		<footer>
+		Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
+		</footer>
+		
+		<script src="js/angular.min.js"></script>
+		<script src="js/angular-route.min.js"></script>
+		<script src="js/d3.min.js"></script>
+		<script src="js/app.js"></script>
 	</body>
 </HTML>
