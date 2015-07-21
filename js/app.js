@@ -57,18 +57,115 @@
 		}
 	});
 	// celsius-fahrenheit temperature display
-	app.directive('tempUnits', function(){
+	app.directive('tempUnits', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/temp-units.html'
 		}
 	});
 	// displays season in the north/south based on Ls
-	app.directive('season', function(){
+	app.directive('season', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/season.html'
 		}
+	});
+
+	// d3 graph directive
+	app.directive ('weatherGraph', function() {
+		return {
+			restrict: 'E',
+			scope: {
+				data: '=data'
+			},
+			link: function(scope, element, attrs) {
+				var margin = {top: 40, right: 10, bottom: 10, left: 50},
+					width = 1000 - margin.left - margin.right,
+				    height = 300 - margin.top - margin.bottom;
+
+				// create the graph area 
+				var chart = d3.select(element[0])
+					.append("svg")
+					.attr("class", "chart")
+				    .attr("width", width+ margin.left + margin.right)
+				    .attr("height", height + margin.top + margin.bottom)
+				    .append("g")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				scope.$watch('data', function(newVal, oldVal) {
+					chart.selectAll("*").remove();
+					if (!newVal) { return; }
+
+					// min y-axis value--have to reverse the list so data is displayed in the correct order
+		    		ymin = d3.min(newVal.map(function(d) { return d.min_temp; }).reverse());
+
+		    		// set values for x and y axis
+					var y = d3.scale.linear()
+								.domain([ymin, 10])
+			   					.range([height, 0])
+			   					.nice();
+
+					var x = d3.scale.ordinal()
+								.domain(newVal.map(function(d) { return d.sol; }).reverse())
+								.rangeRoundBands([0,width], .05);
+
+					// Axes
+					var xAxis = d3.svg.axis()
+									.scale(x)
+									.orient("top");
+
+					var yAxis = d3.svg.axis()
+									.scale(y)
+									.orient("left");	  				
+
+					chart.append("g")
+					  	.attr("class", "x axis")
+					  	.attr("transform", "translate(0,0)")
+					  	.call(xAxis)
+					  	// add axis label
+						.append("text")
+					  		.attr("x", (width+margin.right)/2)
+					  		.attr("y", -margin.top *0.80)
+					  		.text("Sol");
+
+					yAxis_addons = chart.append("g")
+								  	.attr("class", "y axis")
+								  	.call(yAxis)
+					 // add a line where y = 0
+					yAxis_addons.append("line")
+					  		.attr("y1", y(0))
+					  		.attr("y2", y(0))
+					  		.attr("x1", 0)
+							.attr("x2", width)
+							.attr("stroke-dasharray", "10,10")
+					
+					yAxis_addons.append("text")
+							.attr("transform", "rotate(-90)")
+					  		.attr("y", -margin.left * 0.95)
+					  		.attr("x", -height/2 + margin.top)
+					  		.attr("dy", ".71em")
+					  		.style("text-anchor", "end")
+					  		.text("Temperature (C)");
+
+					var min_line = d3.svg.line()
+								.x(function(d) { return x(d.sol); })
+								.y(function(d) { return y(d.min_temp); });
+
+					var max_line = d3.svg.line()
+									.x(function(d) { return x(d.sol); })
+									.y(function(d) { return y(d.max_temp); });
+
+					chart.append("path")
+						.attr("class", "min_line")
+						.attr("d", min_line(newVal));
+
+					chart.append("path")
+						.attr("class", "max_line")
+						.attr("d", max_line(newVal));
+				});
+  				
+			}
+		};
 	});
 
 	// controllers
@@ -126,87 +223,8 @@
 					})
 				})
 			});
-			return results;
-		}).then (function(result) {
-			$scope.agg_data = result;
-			//////// D3.JS STUFF ////////
-			var margin = {top: 40, right: 10, bottom: 10, left: 50};
-			width = 1000 - margin.left - margin.right;
-		    height = 300 - margin.top - margin.bottom;
-
-		    // min y-axis value
-		    ymin = d3.min($scope.agg_data.map(function(d) { return d.min_temp; }).reverse());
-			// set values for x and y axis
-				var y = d3.scale.linear()
-							.domain([ymin, 10])
-		   					.range([height, 0])
-		   					.nice();
-
-				var x = d3.scale.ordinal()
-							.domain($scope.agg_data.map(function(d) { return d.sol; }).reverse())
-							.rangeRoundBands([0,width], .05);
-  				
-  				// Axes
-				var xAxis = d3.svg.axis()
-								.scale(x)
-								.orient("top");
-
-				var yAxis = d3.svg.axis()
-								.scale(y)
-								.orient("left");	  				
-
-  				// create the graph area 
-				var chart = d3.select(".chart")
-				    .attr("width", width+ margin.left + margin.right)
-				    .attr("height", height + margin.top + margin.bottom)
-				    .append("g")
-				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-				chart.append("g")
-				  	.attr("class", "x axis")
-				  	.attr("transform", "translate(0,0)")
-				  	.call(xAxis)
-				  	// add axis label
-					.append("text")
-				  		.attr("x", (width+margin.right)/2)
-				  		.attr("y", -margin.top *0.80)
-				  		.text("Sol");
-
-				yAxis_addons = chart.append("g")
-							  	.attr("class", "y axis")
-							  	.call(yAxis)
-				 // add a line where y = 0
-				yAxis_addons.append("line")
-				  		.attr("y1", y(0))
-				  		.attr("y2", y(0))
-				  		.attr("x1", 0)
-						.attr("x2", width)
-						.attr("stroke-dasharray", "10,10")
-				
-				yAxis_addons.append("text")
-						.attr("transform", "rotate(-90)")
-				  		.attr("y", -margin.left * 0.95)
-				  		.attr("x", -height/2 + margin.top)
-				  		.attr("dy", ".71em")
-				  		.style("text-anchor", "end")
-				  		.text("Temperature (C)");
-
-				var min_line = d3.svg.line()
-							.x(function(d) { return x(d.sol); })
-							.y(function(d) { return y(d.min_temp); })
-
-				var max_line = d3.svg.line()
-								.x(function(d) { return x(d.sol); })
-								.y(function(d) { return y(d.max_temp); })
-
-				chart.append("path")
-					.attr("class", "min_line")
-					.attr("d", min_line($scope.agg_data));
-
-				chart.append("path")
-					.attr("class", "max_line")
-					.attr("d", max_line($scope.agg_data));
-
+			$scope.agg_data = results
+			return $scope.agg_data;
 		});
 		
 	});
@@ -232,7 +250,7 @@
 		}
 		getWeather();
 
-		// query the API every min
+		// query the API every 5 min
 		$interval(function(){
 			//if ($scope.weather.connected) {
 				getWeather();
@@ -240,7 +258,7 @@
 				$scope.weather.report.sol = 'loading...';
 				$scope.refresh++;
 			//}
-		},10000);
+		},50000);
 
 	});
 
