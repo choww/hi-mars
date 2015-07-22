@@ -30,13 +30,9 @@
 				</weather-data>		
 			</div>
 
-
-
-			<div ng-controller="graphController">
-				Minimum and maxium temperatures (in Celsius) data transmitted by the rover over 2 Earth Months
-				<p>
-					<weather-graph data="agg_data"></weather-graph>
-				</p>
+			Minimum and maxium temperatures (in Celsius) data transmitted by the rover over 2 Earth Months<br>
+			<div ng-controller="graphController" id="graph">
+				<weather-graph data="agg_data"></weather-graph>
 			</div>
 		</div>
 

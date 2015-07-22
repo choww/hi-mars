@@ -9,6 +9,9 @@ $shadow-brown: #973603;
 $planet-red: #AE350C;
 $dark-red: #A41D03; 
 
+$large-screen: new-breakpoint(max-width 900px);
+$medium-screen: new-breakpoint(max-width 500px);
+
 
 /**** GLOBAL ****/
 body { 
@@ -74,8 +77,12 @@ a:hover {
 	text-decoration:none;
 }
 
-/**** TEMP GRAPH ****/
+/**** TEMPERATURE GRAPH ****/
 
+#graph {
+	width: 80%;
+	margin: auto;
+}
 
 path {
 	stroke-width: 2;
@@ -99,6 +106,20 @@ path {
   font: 10px sans-serif;
   text-anchor: end;
 }
+
+@include media($large-screen) {
+	.x.axis g.tick:not(:nth-of-type(1)):nth-of-type(3n+1):not(:nth-last-of-type(1)) {
+		display:none;
+	}
+
+}
+
+@include media($medium-screen) {
+	.x.axis g.tick:not(:nth-of-type(4n+1)):not(:nth-last-of-type(1)) {
+		display:none;
+	}
+}
+
 
 
 /**** MISC CLASSES ****/
