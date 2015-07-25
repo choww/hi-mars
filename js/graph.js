@@ -1,115 +1,164 @@
 (function() {
-	var graph = angular.module('d3Graph', ['marsWeather']);
+	var graph = angular.module("weatherGraph", ['appServices', 'marsWeather']);
 
-	graph.directive('lineGraph', function(APIService) {
+	// d3 graph directive
+	graph.directive ('weatherGraph', function(scaleAxis) {
 		return {
-			restrict: 'EA',
+			restrict: 'E',
 			scope: {
-				data: '='
+				data: '=data'
 			},
-			link: function(scope, element, attrs)  {
-				var margin = {top: 40, right: 10, bottom: 10, left: 50},
-					width = 500 - margin.left - margin.right;
-				    height = 300 - margin.top - margin.bottom;
+			link: function(scope, element, attrs) {
+				var width = document.getElementById("graph").clientWidth,
+					height = d3.max([window.innerHeight * 0.40, 300]);
+				var margin = {top: 0.25*height, right: 0.05*width, bottom: 0.05*height, left: 0.06*width}, 
+					hpadding = margin.right + margin.left,
+					vpadding = margin.top + margin.bottom;
 
-				// make the graph responsive 
-				var svg = d3.select(element[0])
+				// create the graph area 
+				var chart_area = d3.select(element[0])
 								.append("svg")
-								.style("width", "100%");
-				window.onresize = function() {
-					scope.$apply();
-				};
+								.attr("class", "chart")
+				// offset the actual area where the data goes to make room for x & y axes
+				var chart = chart_area.append("g")
+					.attr("transform", "translate("+margin.left+","+margin.top+")");
+				
+				// set values for x and y axis
+				var y = d3.scale.linear()
+							// default value set here so zero line is in the right position 
+							.domain([-90, 10])
+							.nice()
+							.range([height-vpadding, 0]);
+				var x = d3.scale.ordinal();
+				
+				// set up axes
+				var xAxis = d3.svg.axis()
+								.scale(x)
+								.orient("top");
+				var yAxis = d3.svg.axis()
+								.scale(y)
+								.orient("left");	
+				var xAxis_add = chart.append("g")
+					  	.attr("class", "x axis")
+					  	.call(xAxis)
+				var yAxis_add = chart.append("g")
+								  	.attr("class", "y axis")
+								  	
+				// axis labels & zero line 
+				var xAxis_label = xAxis_add.append("text")
+									.text("Sol")
+									.attr("class", "xAxis_label")
+									.attr("x", width/2)
+									.attr("y", -margin.top * 0.90);
+				var yAxis_label = yAxis_add.append("text")
+									.attr("transform", "rotate(-90)")
+									.style("text-anchor", "end")
+									.text("Temperature(C)");
 
-				scope.$watch('data', function(newVals, oldVals) {
-					return scope.render(newVals);
-				}, true);
+				// add a line where y = 0
+				var zero_line = yAxis_add.append("line")
+					.attr("id", "zero-line")
+					.attr("y1", y(0))
+				  	.attr("y2", y(0))
+			  		.attr("x1", 0)
+					.attr("stroke-dasharray", "10,10")
 
-				scope.render = function(data) {
+				// set up the data lines 
+				var min_line_add = chart.append("path")
+										.attr("class", "min_line");
+				var max_line_add = chart.append("path")
+										.attr("class", "max_line");
+				
 
-				}
-						// set values for x and y axis
-						var y = d3.scale.linear()
-									.domain([d3.min(scope.graph.map(function(d) { return d.min_temp; }).reverse()), 0])
-				   					.range([height, 0])
-				   					.nice();
+				// watch for changes to the div container 
+				scope.$watch(function(){
+					width = document.getElementById("graph").clientWidth,
+					height = d3.max([window.innerHeight/2, 300]);
+					return width + height;
+				}, resize);
 
-						var x = d3.scale.ordinal()
-									.domain(scope.graph.map(function(d) { return d.sol; }).reverse())
-									.rangeRoundBands([0,width], .05);
-						// Axes
-						var xAxis = d3.svg.axis()
-										.scale(x)
-										.orient("top");
 
-						var yAxis = d3.svg.axis()
-										.scale(y)
-										.orient("left");	  				
+				function resize() {
+					chart_area.attr("width", width)
+					    .attr("height", height)
 
-		  				// create the graph area 
-						var chart = d3.select(".chart2")
-						    .attr("width", width+ margin.left + margin.right)
-						    .attr("height", height + margin.top + margin.bottom)
-						    .append("g")
-						    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+					x.rangeBands([0, (width - hpadding)], 0.05)
+					y.range([(height-vpadding), 0]);
 
-						chart.append("g")
-						  	.attr("class", "x axis")
-						  	.attr("transform", "translate(0,0)")
-						  	.call(xAxis)
-						  	// add axis label
-							.append("text")
-						  		.attr("x", (width+margin.right)/2)
-						  		.attr("y", -margin.top *0.80)
-						  		.text("Sol");
+					scaleAxis.scale(width, height, xAxis_add);
 
-						chart.append("g")
-						  	.attr("class", "y axis")
-						  	.call(yAxis)
-						  	.append("text")
-						  		.attr("transform", "rotate(-90)")
-						  		.attr("y", -margin.left * 0.95)
-						  		.attr("x", -height/2 + margin.top)
-						  		.attr("dy", ".71em")
-						  		.style("text-anchor", "end")
-						  		.text("Min temp (C)");
+					// add axis label
+					xAxis_label.attr("x", (width+margin.right)/2)
+					  	.attr("y", -margin.top *0.80)
+					
+					yAxis_label.attr("y", -margin.left * 0.95)
+				  		.attr("x", -height/2 + margin.top)
+				  		.attr("dy", ".71em");
+				  	zero_line.attr("y1", y(0))
+				  		.attr("y2", y(0))
+				  		.attr("x2", width - hpadding);
+					updateGraph();
+				};			
 
-						var min_line = d3.svg.line()
+				scope.$watch('data', updateGraph);
+
+				function updateGraph() {
+					data = scope.data;
+					if (!data) { return };
+		    		// min y-axis value and x-axis values--have to reverse the list so data is displayed in the correct order
+		    		var ymin = d3.min(data.map(function(d) { return d.min_temp; }).reverse());
+		    		var xval = data.map(function(d) { return d.sol; }).reverse();
+		    		
+		    		// set values for x and y axis
+					y.domain([ymin, 10]).nice();	
+					x.domain(xval);
+
+					xAxis_add.call(xAxis);
+					yAxis_add.call(yAxis);
+
+					scaleAxis.scale(width, height, xAxis_add);
+
+					var min_line = d3.svg.line()
+								.x(function(d) { return x(d.sol); })
+								.y(function(d) { return y(d.min_temp); });
+
+					var max_line = d3.svg.line()
 									.x(function(d) { return x(d.sol); })
-									.y(function(d) { return y(d.min_temp); })
+									.y(function(d) { return y(d.max_temp); });
 
-						var max_line = d3.svg.line()
-										.x(function(d) { return x(d.sol); })
-										.y(function(d) { return y(d.max_temp); })
-
-						chart.append("path")
-							.attr("class", "min_line")
-							.attr("d", min_line($scope.graphData));
-
-						chart.append("path")
-							.attr("class", "max_line")
-							.attr("d", max_line($scope.graphData));		
-					});
-				};
-				grabData();
-				}
+					// shift the lines horizontally so they line up with x-axis ticks
+					min_line_add.attr("d", min_line(data))
+						.attr("transform", "translate("+margin.left/6+")");
+					max_line_add.attr("d", max_line(data))
+						.attr("transform", "translate("+margin.left/6+")");
+				};	
 			}
-
-		});
-
-	graph.controller ('graphCtrl'), function($scope, APIService) {
-		var results = [];
-		$scope.data = {};
-		for (var num = 1; num <= 3; num++) {
-			var url = "http://marsweather.ingenology.com/v1/archive/?page="+num+"&terrestrial_date_end="+today+"&terrestrial_date_start="+one_yr_earlier+"&format=jsonp&callback=JSON_CALLBACK";
-			APIService.setURL(url);
-			APIService.getData().then(function(data, status) {
-				results.push(data.results);
-				angular.forEach(results, function(page) {
-					return page.
-				})
-			});
 		};
 	});
-	
 
+	graph.controller("graphController", function($scope, $q, $window, APIService, dateService) {
+		angular.element($window).on("resize", function() {$scope.$apply(); });
+
+		$scope.agg_data = {};
+
+		// combine data from multiple API calls into one aggregate data set.
+		var calls = [];
+		for (var num = 1; num <= 3; num++) {
+			var api_url = "http://marsweather.ingenology.com/v1/archive/?page="+num+"&terrestrial_date_end="+dateService.today+"&terrestrial_date_start="+dateService.two_mnths_earlier+"&format=jsonp&callback=JSON_CALLBACK";
+			calls.push(APIService.getData(api_url));
+		};
+
+		$q.all(calls).then(function(result) {
+			var results = [];
+			angular.forEach(result, function(rrr) {
+				angular.forEach(rrr, function(rr) {
+					angular.forEach(rr.results, function(r) {
+						results.push({sol: r.sol, min_temp: r.min_temp, max_temp: r.max_temp});
+					})
+				})
+			});
+			$scope.agg_data = results
+			return $scope.agg_data;
+		});	
+	});
 })();
