@@ -1,100 +1,174 @@
 @import 'bourbon/bourbon';
 @import 'neat/neat';
+@import url(http://fonts.googleapis.com/css?family=Allerta+Stencil|Bubbler+One|Text+Me+One);
 
-
+$space-blue: #011327;
 $light-sky-brown: #DB7908;
-$lighter-sky-brown: tint($light-sky-brown, 10%);
 $sandy-brown: #AE540C;
 $shadow-brown: #973603;
-$planet-red: #AE350C;
-$dark-red: #A41D03; 
+$planet-red: #FF2700;
+$light-red: #FF907C; 
 
 $large-screen: new-breakpoint(max-width 900px);
-$medium-screen: new-breakpoint(max-width 500px);
-$small-screen: new-breakpoint(max-width 400px);
-
+$medium-screen: new-breakpoint(max-width 600px);
+$small-screen: new-breakpoint(max-width 480px);
+$smallest-screen: new-breakpoint(max-width 300px);
 
 /**** GLOBAL ****/
 body { 
 	margin: 0px;
 	@outer-container($local-max-width: $max-width);
-	background-color: $sandy-brown;
-	color: shade($planet-red, 80%);
+	background-color: $planet-red;
 	font-family: $helvetica;
+	color: #fff;
+}
 
+
+/**** TYPE ****/
+
+.heading { 
+	font-family: 'Allerta Stencil', "Century Gothic", 
+				  CenturyGothic, sans-serif;
+	line-height: 5px;
 }
 
 h1 {
-	font-size: 36px;
-	color: $shadow-brown;
+	font-size: 64px;
+	color: $planet-red;
+	font-weight: 300;
+}
+
+.sol {
+	margin-top: 50px;
+	font-size: 52px;
+	color: #fff;
+	letter-spacing: 4px;
+}
+
+.subheading { 
+	font-family: 'Arial Narrow', Arial;
+	font-stretch: extra-condensed;
+	font-weight: 100;
+	color: #fff;
 }
 
 h2 {
 	font-size: 22px;
-	color: $dark-red;
+	color: #fff;
 }
+
+.tagline { 
+	font-size: 28px;
+}
+
+.last_transmit {
+	font-size: 12px;
+}
+
+.weather {
+	font-family: 'Bubbler One', sans-serif;
+	font-size: 47px;
+	color: #fff;
+	line-height: 10px;
+	letter-spacing: 4px;
+ }
+
+ .underline {
+ 	text-decoration: underline;
+ }
+
+.content { 
+	font-family: 'Text Me One', 'Arial Narrow', Arial, sans-serif;
+	color: #fff;
+}
+
+.season { 
+	font-size: 38px;
+	line-height: 25px;
+}
+
+.temp_label {
+	font-size: 23px;
+}
+
+.temp_data { 
+	font-size: 21px;
+}
+
+.graph_heading {
+	font-size: 38px;
+}
+
+.graph_info {
+	font-size: 18px;
+	color: $light-red;
+	font-weight: 100;
+}
+
 
 /**** HEADER ****/
 header {
-	@include linear-gradient(to bottom, $light-sky-brown 50%, $lighter-sky-brown 100%);
 	margin-top: 0;
 	padding-top: 20%;
 	padding-bottom: 5%;
 	text-align:center;
-	background-color:$light-sky-brown;
-
+	background-color:$space-blue;
 }
-
-/**** TEXT STYLES ***/
-
-strong {}
-
-
-em {}
 
 /**** MAIN CONTENT ****/
 
-.content {
-	font-size: 20px;
-	margin: 15px 20px;
+.left {
 	text-align:center;
+	font-size: 20px;
+	float:left;
+	width: 30%;
+	margin-left: 8%;
+}
+
+.right {
+	float:right;
+	width: 60%;
+
 }
 
 /**** FOOTER ****/
 footer {
 	clear:both;
+	margin-top: 30px;
 	text-align: center;
 }
 
 /**** LINKS ****/
 a:link, a:visited, a:active {
-	color: $shadow-brown;
+	color: $light-red;
 	text-decoration:none;
 }
 
 a:hover {
-	color: $shadow-brown;
+	color: $light-red;
 	font-variant: small-caps;
-	text-decoration:none;
+	text-decoration:underline;
+	border-bottom: 1px dashed #fff;
 }
 
 /**** TEMPERATURE GRAPH ****/
 
 #graph {
-	width: 80%;
-	margin: auto;
-}
+	margin-right: 20px;
+ }
 
 path {
 	stroke-width: 2;
 	fill:none;
 }
 
+
+
 .min_line {
-	stroke: $lighter-sky-brown;
+	stroke: $space-blue;
 }
 .max_line {
-	stroke: $dark-red;
+	stroke: $light-red;
 }
 .axis line, .axis path {
 	fill: none;
@@ -102,28 +176,71 @@ path {
 	stroke:#000;
 	shape-rendering: crispEdges;
 }
-.chart text {
+.chart_area text {
   fill:white ;
   font: 10px sans-serif;
-  text-anchor: end;
+}
+
+.xAxis_label, .yAxis_label {
+	text-anchor: end;
 }
 
 @include media($large-screen) {
 	.x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
 		display:none;
 	}
+
+	.y.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
+		display:none;
+	}
 }
 
 @include media($medium-screen) {
+	#graph {
+		width: 90%;
+		margin: auto;
+	}
 	.x.axis g:not(:nth-of-type(4n+1)):not(:nth-last-of-type(1)) {
+		display:none;
+	}
+	.y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
 		display:none;
 	}
 }
 
 @include media($small-screen) {
+	#graph {
+		width: 100% !important;
+	}
+	.yAxis_label {
+		text-anchor: middle !important;
+	}
 	.x.axis g:not(:first-of-type):not(:last-of-type) {
 		display:none;
 	}
+
+	.y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
+		display:none;
+	}
+}
+
+@include media($smallest-screen) {
+		#graph {
+		width: 100% !important;
+	}
+	.yAxis_label {
+		text-anchor: middle !important;
+	}
+	.x.axis g:not(:first-of-type):not(:last-of-type),
+	.x.axis g.tick line {
+		display:none;
+	}
+
+	.y.axis g:not(:first-of-type):not(:nth-of-type(9)), 
+	.y.axis g.tick line {
+		display:none;
+	}
+
 }
 
 
@@ -132,7 +249,7 @@ path {
 .loading {
 	font-size: 26px;
 	font-weight: 600;
-	color: #222;
+	color: $light-red;
 	padding: 10px;
 	margin: auto;
 }
@@ -146,6 +263,3 @@ path {
 	margin: auto;
 	font-size: 20px;	
 }
-
-
-

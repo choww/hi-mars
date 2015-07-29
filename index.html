@@ -12,28 +12,33 @@
 	
 
 		<header>
-			<h1>Meanwhile on Mars...</h1>
-			<h2>Real-time weather data from the Curiosity Rover!</h2>
+			<h1 class="heading">Meanwhile on Mars...</h1>
+			<h2 class="subheading">Weather data from the Curiosity Rover!</h2>
 		</header>
-		<div class="content">
+		<div class="left">
 			<div ng-controller="weatherController">
-				This API refreshed {{refresh}} times<br>
-				<div class="loading" ng-show="weather.loaded === 0">
+			
+				<div class="content" class="loading" ng-show="weather.loaded === 0">
 
 					Loading...
 				</div>
 
-				<div class="load-error" ng-show="weather.loaded === 2">
+				<div class="content load-error" ng-show="weather.loaded === 2">
 					Connection error: Please check your internet connection or refresh the page!
 				</div>	
 				<weather-data ng-show="weather.loaded === 1">
 				</weather-data>		
 			</div>
+		</div>
 
-			Minimum and maxium temperatures (in Celsius) data transmitted by the rover over 2 Earth Months<br>
-			<div ng-controller="graphController" id="graph">
-				<weather-graph data="agg_data"></weather-graph>
-			</div>
+		<div class="right" ng-controller="graphController">
+				<div id="graph" ng-show="loaded === 1">
+				<p>
+					<div class="content graph_heading">Temperature over time</div>
+					<div class="subheading graph_info">Based on data transmitted over 2 Earth months</div>
+					<br>
+					<weather-graph data="agg_data"></weather-graph>
+				</div>
 		</div>
 
 

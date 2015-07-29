@@ -46,23 +46,68 @@
 	// adjust x and y axis as screen width changes. 
 	services.factory("scaleAxis", function() {
 		var responsive = {};
-		responsive.scale = function(width, height, axis) { 
-			var margin = {top: 0.25*height, right: 0.05*width, bottom: 0.05*height, left: 0.06*width}
-			if (width <= 900) {
-				axis.selectAll("text")
-				.attr("dx", "2.2em")
-				.attr("dy", "1.5em")
-				.attr("transform", function(d) { return "rotate(-90)" });
-
-				axis.selectAll(".xAxis_label") 
-					.attr("transform", "rotate(0)")
-					.attr("x", width/2 + margin.left)
-			}
-			else {
-				axis.selectAll("text")
+		responsive.scale = function(width, height, xAxis, yAxis) { 
+			var margin = {top: 0.28*height, right: 0.05*width, bottom: 0.05*height, left: 0.20*width}
+			
+			if (width > 900) { 
+				xAxis.selectAll("text")
 					.attr("dx", "0.25em")
 					.attr("dy", "0.25em")
-					.attr("transform", function(d) { return "rotate(0)"})
+					.attr("transform", "rotate(0)");
+
+				xAxis.selectAll(".xAxis_label") 
+					.attr("x", width/2 - margin.right)
+					.attr("y", -margin.top * 0.)
+
+				yAxis.selectAll(".yAxis_label")
+					.attr("x", -(height - margin.top) * 30)
+				  	.attr("y", -margin.left * 0.25)
+			}
+			else if (width >= 500) {
+				xAxis.selectAll("text")
+					.attr("dx", "2.2em")
+					.attr("dy", "1.5em")
+					.attr("transform", function(d) { return "rotate(-90)" });
+
+				xAxis.selectAll(".xAxis_label") 
+					.attr("transform", "rotate(0)")
+					.attr("x", (width-margin.right) * 0.4)
+					.attr("y", -margin.top * 0.83)
+
+				yAxis.selectAll(".yAxis_label")
+					.attr("x", -(height-margin.top) * 0.30)
+				  	.attr("y", -margin.left/3);
+			}
+			else if (width >= 370) {
+				xAxis.selectAll("text")
+					.attr("dx", "2.2em")
+					.attr("dy", "1.5em")
+					.attr("transform", function(d) { return "rotate(-90)"});
+
+				xAxis.selectAll(".xAxis_label") 
+					.attr("x", (width - margin.right) * 0.40)
+					.attr("y", -margin.top * 0.88)
+					.attr("transform", "rotate(0)")
+
+				yAxis.selectAll(".yAxis_label")
+					.attr("x", -(height + margin.top)*0.18)
+					.attr("y", -margin.left/3)
+			}
+			else  {
+				xAxis.selectAll("text")
+					.attr("dx", "2.2em")
+					.attr("dy", "1.3em")
+					.attr("transform", function(d) {return "rotate(-90)"})
+
+				xAxis.selectAll(".xAxis_label")
+					.attr("x", (width - margin.right) * 0.40)
+					.attr("y", -margin.top)
+					.attr("transform", "rotate(0)");
+
+				yAxis.selectAll(".yAxis_label")
+					.attr("x", -(height+margin.top)*0.25)
+					.attr("y", -margin.left/2)
+		
 			}
 		};
 		return responsive; 

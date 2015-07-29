@@ -10,18 +10,18 @@
 			},
 			link: function(scope, element, attrs) {
 				var width = document.getElementById("graph").clientWidth,
-					height = d3.max([window.innerHeight * 0.40, 300]);
-				var margin = {top: 0.25*height, right: 0.05*width, bottom: 0.05*height, left: 0.06*width}, 
+					height = d3.max([width * 0.35, 170]);
+				var margin = {top: 0.28*height, right: 0.05*width, bottom: 0.05*height, left: 0.15*width}, 
 					hpadding = margin.right + margin.left,
 					vpadding = margin.top + margin.bottom;
 
 				// create the graph area 
 				var chart_area = d3.select(element[0])
 								.append("svg")
-								.attr("class", "chart")
+								.attr("class", "chart_area")
 				// offset the actual area where the data goes to make room for x & y axes
 				var chart = chart_area.append("g")
-					.attr("transform", "translate("+margin.left+","+margin.top+")");
+								.attr("transform", "translate("+margin.left+","+margin.top+")");
 				
 				// set values for x and y axis
 				var y = d3.scale.linear()
@@ -45,15 +45,13 @@
 								  	.attr("class", "y axis")
 								  	
 				// axis labels & zero line 
-				var xAxis_label = xAxis_add.append("text")
-									.text("Sol")
-									.attr("class", "xAxis_label")
-									.attr("x", width/2)
-									.attr("y", -margin.top * 0.90);
-				var yAxis_label = yAxis_add.append("text")
-									.attr("transform", "rotate(-90)")
-									.style("text-anchor", "end")
-									.text("Temperature(C)");
+				xAxis_add.append("text")
+					.text("Sol")
+					.attr("class", "xAxis_label")
+				yAxis_add.append("text")
+					.attr("class", "yAxis_label")
+					.attr("transform", "rotate(-90)")
+					.text("Temperature(C)");
 
 				// add a line where y = 0
 				var zero_line = yAxis_add.append("line")
@@ -73,7 +71,7 @@
 				// watch for changes to the div container 
 				scope.$watch(function(){
 					width = document.getElementById("graph").clientWidth,
-					height = d3.max([window.innerHeight/2, 300]);
+					height = d3.max([width * 0.35, 170]);
 					return width + height;
 				}, resize);
 
@@ -85,15 +83,9 @@
 					x.rangeBands([0, (width - hpadding)], 0.05)
 					y.range([(height-vpadding), 0]);
 
-					scaleAxis.scale(width, height, xAxis_add);
+					// from appServices
+					scaleAxis.scale(width, height, xAxis_add, yAxis_add);
 
-					// add axis label
-					xAxis_label.attr("x", (width+margin.right)/2)
-					  	.attr("y", -margin.top *0.80)
-					
-					yAxis_label.attr("y", -margin.left * 0.95)
-				  		.attr("x", -height/2 + margin.top)
-				  		.attr("dy", ".71em");
 				  	zero_line.attr("y1", y(0))
 				  		.attr("y2", y(0))
 				  		.attr("x2", width - hpadding);
@@ -116,7 +108,7 @@
 					xAxis_add.call(xAxis);
 					yAxis_add.call(yAxis);
 
-					scaleAxis.scale(width, height, xAxis_add);
+					scaleAxis.scale(width, height, xAxis_add, yAxis_add);
 
 					var min_line = d3.svg.line()
 								.x(function(d) { return x(d.sol); })
@@ -140,6 +132,7 @@
 		angular.element($window).on("resize", function() {$scope.$apply(); });
 
 		$scope.agg_data = {};
+		$scope.loaded = 0;
 
 		// combine data from multiple API calls into one aggregate data set.
 		var calls = [];
@@ -159,6 +152,7 @@
 			});
 			$scope.agg_data = results
 			return $scope.agg_data;
-		});	
+		});
+		$scope.loaded = 1;
 	});
 })();

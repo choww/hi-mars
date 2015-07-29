@@ -1,10 +1,8 @@
-<br>Data last transmitted on {{weather.report.terrestrial_date | date}}
-
 <p>
-Sol: {{ weather.report.sol }} | <season></season><br>
-Weather: {{weather.report.atmo_opacity}} <br>
+<div class="heading sol">Sol {{ weather.report.sol }}</div><br>
+<season></season><br>
+<div class="weather">It's <span class="underline">{{weather.report.atmo_opacity}}</span>!</div> <br>
 <temp-units ng-controller="tempController">
 </temp-units>
-Wind speed: {{weather.report.wind_speed || 'null' }} <br>
-Sunrise: {{weather.report.sunrise |date:'mediumTime'}} <br>
-Sunset: {{weather.report.sunset|date:'mediumTime'}}			
+
+<p><div class="subheading last_transmit">Data last transmitted on {{weather.report.terrestrial_date | date}}			
