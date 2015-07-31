@@ -2,16 +2,16 @@
 	var graph = angular.module("weatherGraph", ['appServices', 'marsWeather']);
 
 	// d3 graph directive
-	graph.directive ('weatherGraph', function(scaleAxis) {
+	graph.directive ('weatherGraph', function(responsiveD3) {
 		return {
 			restrict: 'E',
 			scope: {
 				data: '=data'
 			},
 			link: function(scope, element, attrs) {
-				var width = document.getElementById("graph").clientWidth,
-					height = d3.max([width * 0.35, 170]);
-				var margin = {top: 0.28*height, right: 0.05*width, bottom: 0.05*height, left: 0.15*width}, 
+				var width = responsiveD3.width,
+					height = responsiveD3.height;
+				var margin = responsiveD3.margin, 
 					hpadding = margin.right + margin.left,
 					vpadding = margin.top + margin.bottom;
 
@@ -56,20 +56,27 @@
 				// add a line where y = 0
 				var zero_line = yAxis_add.append("line")
 					.attr("id", "zero-line")
-					.attr("y1", y(0))
-				  	.attr("y2", y(0))
 			  		.attr("x1", 0)
-					.attr("stroke-dasharray", "10,10")
+					.attr("stroke-dasharray", "8,8")
 
 				// set up the data lines 
 				var min_line_add = chart.append("path")
 										.attr("class", "min_line");
 				var max_line_add = chart.append("path")
 										.attr("class", "max_line");
+				// legend
+				var legend = chart.append("g")
+								  .attr("class", "legend");
+				var max_label = legend.append("text")
+								  .attr("class", "max_label")
+								  .text("max temperature");
+				var min_label = legend.append("text")
+								  .attr("class", "min_label")
+								  .text("min temperature");
 				
-
 				// watch for changes to the div container 
 				scope.$watch(function(){
+					// get new width & height
 					width = document.getElementById("graph").clientWidth,
 					height = d3.max([width * 0.35, 170]);
 					return width + height;
@@ -81,13 +88,13 @@
 					    .attr("height", height)
 
 					x.rangeBands([0, (width - hpadding)], 0.05)
-					y.range([(height-vpadding), 0]);
+					y.range([height - vpadding, 0]);
 
 					// from appServices
-					scaleAxis.scale(width, height, xAxis_add, yAxis_add);
+					responsiveD3.scale(width, height, xAxis_add, yAxis_add);
 
-				  	zero_line.attr("y1", y(0))
-				  		.attr("y2", y(0))
+				  	zero_line.attr("y1", y(-1))
+				  		.attr("y2", y(-1))
 				  		.attr("x2", width - hpadding);
 					updateGraph();
 				};			
@@ -108,21 +115,26 @@
 					xAxis_add.call(xAxis);
 					yAxis_add.call(yAxis);
 
-					scaleAxis.scale(width, height, xAxis_add, yAxis_add);
+					responsiveD3.scale(width, height, xAxis_add, yAxis_add);
 
+					var max_line = d3.svg.line()
+									.x(function(d) { return x(d.sol); })
+									.y(function(d) { return y(d.max_temp); })
 					var min_line = d3.svg.line()
 								.x(function(d) { return x(d.sol); })
 								.y(function(d) { return y(d.min_temp); });
 
-					var max_line = d3.svg.line()
-									.x(function(d) { return x(d.sol); })
-									.y(function(d) { return y(d.max_temp); });
-
 					// shift the lines horizontally so they line up with x-axis ticks
-					min_line_add.attr("d", min_line(data))
-						.attr("transform", "translate("+margin.left/6+")");
 					max_line_add.attr("d", max_line(data))
 						.attr("transform", "translate("+margin.left/6+")");
+					min_line_add.attr("d", min_line(data))
+						.attr("transform", "translate("+margin.left/6+")");
+														 
+
+					max_label.attr("x", width * 0.65)
+						  	 .attr("y", height/2 - margin.bottom*2);
+					min_label.attr("x", width * 0.65)
+						  	 .attr("y", height/2 + margin.bottom*2);
 				};	
 			}
 		};
@@ -139,6 +151,7 @@
 		for (var num = 1; num <= 3; num++) {
 			var api_url = "http://marsweather.ingenology.com/v1/archive/?page="+num+"&terrestrial_date_end="+dateService.today+"&terrestrial_date_start="+dateService.two_mnths_earlier+"&format=jsonp&callback=JSON_CALLBACK";
 			calls.push(APIService.getData(api_url));
+			$scope.loaded = 1;
 		};
 
 		$q.all(calls).then(function(result) {
@@ -153,6 +166,5 @@
 			$scope.agg_data = results
 			return $scope.agg_data;
 		});
-		$scope.loaded = 1;
 	});
 })();

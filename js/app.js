@@ -67,7 +67,6 @@
 
 	app.controller('weatherController', function($scope, $interval, APIService) {
 		$scope.weather = {};
-		$scope.refresh = 0;
 		// keep track of whether API data loaded or not
 		$scope.weather.loaded = 0;
 
@@ -92,7 +91,6 @@
 				getWeather();
 				// for debugging purposes
 				$scope.weather.report.sol = 'loading...';
-				$scope.refresh++;
 			//}
 		},100000);
 

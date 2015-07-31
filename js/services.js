@@ -44,41 +44,36 @@
 	});
 
 	// adjust x and y axis as screen width changes. 
-	services.factory("scaleAxis", function() {
+	services.factory("responsiveD3", function() {
 		var responsive = {};
-		responsive.scale = function(width, height, xAxis, yAxis) { 
-			var margin = {top: 0.28*height, right: 0.05*width, bottom: 0.05*height, left: 0.20*width}
-			
-			if (width > 900) { 
-				xAxis.selectAll("text")
-					.attr("dx", "0.25em")
-					.attr("dy", "0.25em")
-					.attr("transform", "rotate(0)");
+		responsive.width = document.getElementById("graph").clientWidth;
+		responsive.height = d3.max([width * 0.35, 170]);
 
-				xAxis.selectAll(".xAxis_label") 
-					.attr("x", width/2 - margin.right)
-					.attr("y", -margin.top * 0.)
+		var width = responsive.width,
+			height = responsive.height;
 
-				yAxis.selectAll(".yAxis_label")
-					.attr("x", -(height - margin.top) * 30)
-				  	.attr("y", -margin.left * 0.25)
-			}
-			else if (width >= 500) {
+		responsive.margin = {top: 0.35*height, right: 0.05*width, 		
+							bottom: 0.05*height, left: 0.10*width}
+		
+		var margin = responsive.margin;
+
+		responsive.scale = function(width, height, xAxis, yAxis) {	
+			if (width >= 500) {
 				xAxis.selectAll("text")
-					.attr("dx", "2.2em")
-					.attr("dy", "1.5em")
+					.attr("dx", "2em")
+					.attr("dy", "1em")
 					.attr("transform", function(d) { return "rotate(-90)" });
 
 				xAxis.selectAll(".xAxis_label") 
 					.attr("transform", "rotate(0)")
 					.attr("x", (width-margin.right) * 0.4)
-					.attr("y", -margin.top * 0.83)
+					.attr("y", -margin.top)
 
 				yAxis.selectAll(".yAxis_label")
-					.attr("x", -(height-margin.top) * 0.30)
-				  	.attr("y", -margin.left/3);
+					.attr("x", -(height-margin.top) * 0.25)
+				  	.attr("y", -margin.left * 0.75);
 			}
-			else if (width >= 370) {
+			else if (width >= 400) {
 				xAxis.selectAll("text")
 					.attr("dx", "2.2em")
 					.attr("dy", "1.5em")

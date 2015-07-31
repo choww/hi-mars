@@ -9,18 +9,19 @@ $shadow-brown: #973603;
 $planet-red: #FF2700;
 $light-red: #FF907C; 
 
-$large-screen: new-breakpoint(max-width 900px);
-$medium-screen: new-breakpoint(max-width 600px);
-$small-screen: new-breakpoint(max-width 480px);
-$smallest-screen: new-breakpoint(max-width 300px);
+$large-screen: new-breakpoint(max-width 1100px);
+$medium-screen: new-breakpoint(max-width 900px);
+$small-screen: new-breakpoint(max-width 680px);
+$smallest-screen: new-breakpoint(max-width 480px);
 
 /**** GLOBAL ****/
 body { 
 	margin: 0px;
 	@outer-container($local-max-width: $max-width);
-	background-color: $planet-red;
 	font-family: $helvetica;
 	color: #fff;
+	background:$space-blue;
+	overflow-x:hidden;
 }
 
 
@@ -39,7 +40,6 @@ h1 {
 }
 
 .sol {
-	margin-top: 50px;
 	font-size: 52px;
 	color: #fff;
 	letter-spacing: 4px;
@@ -66,7 +66,7 @@ h2 {
 }
 
 .weather {
-	font-family: 'Bubbler One', sans-serif;
+	font-family: 'Bubbler One', Trebuchet, sans-serif;
 	font-size: 47px;
 	color: #fff;
 	line-height: 10px;
@@ -78,13 +78,14 @@ h2 {
  }
 
 .content { 
-	font-family: 'Text Me One', 'Arial Narrow', Arial, sans-serif;
+	font-family: 'Text Me One', Trebuchet, Arial, sans-serif;
 	color: #fff;
 }
 
 .season { 
 	font-size: 38px;
 	line-height: 25px;
+	font-variant: small-caps;
 }
 
 .temp_label {
@@ -96,7 +97,7 @@ h2 {
 }
 
 .graph_heading {
-	font-size: 38px;
+	font-size: 30px;
 }
 
 .graph_info {
@@ -109,33 +110,47 @@ h2 {
 /**** HEADER ****/
 header {
 	margin-top: 0;
-	padding-top: 20%;
-	padding-bottom: 5%;
+	padding-top: 5%;
+	padding-bottom: 2.5%;
 	text-align:center;
-	background-color:$space-blue;
 }
 
 /**** MAIN CONTENT ****/
 
+.main {
+	background: $planet-red;
+	position:absolute;
+	margin-left: -10%;
+	height: auto;
+	width: 125%;
+	border-top-right-radius: 45%;
+	border-top-left-radius: 45%;
+}
 .left {
+	padding-top: 60px;
+	margin-left: 18%;
+	position: relative;
 	text-align:center;
 	font-size: 20px;
 	float:left;
-	width: 30%;
-	margin-left: 8%;
+	width: 25%;
+	height: 100%;
 }
 
 .right {
+	padding-top: 40px;
+	margin-right: 5%;
 	float:right;
-	width: 60%;
-
+	width: 50%;
+	height: 100%;
 }
 
 /**** FOOTER ****/
 footer {
 	clear:both;
-	margin-top: 30px;
-	text-align: center;
+	padding-top: 30px;
+	margin-left: 40%;
+	background: $planet-red;
 }
 
 /**** LINKS ****/
@@ -155,14 +170,18 @@ a:hover {
 
 #graph {
 	margin-right: 20px;
+	width:70%;
  }
+
+ .chart_area text {
+  fill:white ;
+  font: 12px $helvetica, sans-serif;
+}
 
 path {
 	stroke-width: 2;
 	fill:none;
 }
-
-
 
 .min_line {
 	stroke: $space-blue;
@@ -170,15 +189,19 @@ path {
 .max_line {
 	stroke: $light-red;
 }
+
+.min_label {
+	fill: $space-blue !important;
+}
+.max_label {
+	fill: $light-red !important;
+}
+
 .axis line, .axis path {
 	fill: none;
 	stroke-width: 1;
 	stroke:#000;
 	shape-rendering: crispEdges;
-}
-.chart_area text {
-  fill:white ;
-  font: 10px sans-serif;
 }
 
 .xAxis_label, .yAxis_label {
@@ -243,8 +266,6 @@ path {
 
 }
 
-
-
 /**** MISC CLASSES ****/
 .loading {
 	font-size: 26px;
@@ -254,7 +275,6 @@ path {
 	margin: auto;
 }
 
-/**** ERROR-RELATED CLASSES ****/
 .load-error {
 	background-color: tint($planet-red, 25%);
 	border: $planet-red solid 1px;
