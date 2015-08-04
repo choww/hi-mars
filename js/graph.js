@@ -130,11 +130,10 @@
 					min_line_add.attr("d", min_line(data))
 						.attr("transform", "translate("+margin.left/6+")");
 														 
-
-					max_label.attr("x", width * 0.65)
-						  	 .attr("y", height/2 - margin.bottom*2);
-					min_label.attr("x", width * 0.65)
-						  	 .attr("y", height/2 + margin.bottom*2);
+					max_label.attr("x", width * 0.63)
+						  	 .attr("y", height/3);
+					min_label.attr("x", width * 0.63)
+						  	 .attr("y", height/2 + margin.bottom);
 				};	
 			}
 		};

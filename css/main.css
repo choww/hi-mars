@@ -7,7 +7,7 @@ html {
 
 /**** GLOBAL ****/
 body {
-  margin: 0px;
+  margin: 0;
   @outer-container ($local-max-width: $max-width);
   font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
   color: #fff;
@@ -38,9 +38,6 @@ h1 {
 h2 {
   font-size: 22px;
   color: #fff; }
-
-.tagline {
-  font-size: 28px; }
 
 .last_transmit {
   font-size: 12px; }
@@ -81,7 +78,7 @@ h2 {
 /**** HEADER ****/
 header {
   margin-top: 0;
-  padding-top: 5%;
+  padding-top: 6%;
   padding-bottom: 2.5%;
   text-align: center; }
 
@@ -89,11 +86,13 @@ header {
 .main {
   background: #FF2700;
   position: absolute;
+  margin-top: 2%;
   margin-left: -10%;
+  padding-bottom: 0;
+  margin-bottom: 6%;
   height: auto;
   width: 125%;
-  border-top-right-radius: 45%;
-  border-top-left-radius: 45%; }
+  border-radius: 45%; }
 
 .left {
   padding-top: 60px;
@@ -102,22 +101,20 @@ header {
   text-align: center;
   font-size: 20px;
   float: left;
-  width: 25%;
-  height: 100%; }
+  width: 25%; }
 
 .right {
   padding-top: 40px;
   margin-right: 5%;
   float: right;
-  width: 50%;
-  height: 100%; }
+  width: 50%; }
 
 /**** FOOTER ****/
 footer {
   clear: both;
   padding-top: 30px;
-  margin-left: 40%;
-  background: #FF2700; }
+  margin-left: 42%;
+  margin-bottom: 5%; }
 
 /**** LINKS ****/
 a:link, a:visited, a:active {
@@ -164,48 +161,6 @@ path {
 .xAxis_label, .yAxis_label {
   text-anchor: end; }
 
-@media screen and (max-width: 1100px) {
-  .x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
-    display: none; }
-
-  .y.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
-    display: none; } }
-@media screen and (max-width: 900px) {
-  #graph {
-    width: 90%;
-    margin: auto; }
-
-  .x.axis g:not(:nth-of-type(4n+1)):not(:nth-last-of-type(1)) {
-    display: none; }
-
-  .y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
-    display: none; } }
-@media screen and (max-width: 680px) {
-  #graph {
-    width: 100% !important; }
-
-  .yAxis_label {
-    text-anchor: middle !important; }
-
-  .x.axis g:not(:first-of-type):not(:last-of-type) {
-    display: none; }
-
-  .y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
-    display: none; } }
-@media screen and (max-width: 480px) {
-  #graph {
-    width: 100% !important; }
-
-  .yAxis_label {
-    text-anchor: middle !important; }
-
-  .x.axis g:not(:first-of-type):not(:last-of-type),
-  .x.axis g.tick line {
-    display: none; }
-
-  .y.axis g:not(:first-of-type):not(:nth-of-type(9)),
-  .y.axis g.tick line {
-    display: none; } }
 /**** MISC CLASSES ****/
 .loading {
   font-size: 26px;
@@ -221,5 +176,112 @@ path {
   text-align: center;
   margin: auto;
   font-size: 20px; }
+
+@media screen and (max-width: 1100px) {
+  .x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
+    display: none; }
+
+  .y.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
+    display: none; } }
+@media screen and (max-width: 900px) {
+  .left, .right {
+    float: none; }
+
+  .left {
+    margin-left: 28%;
+    width: 40%; }
+
+  .right {
+    text-align: center;
+    padding-top: 20px;
+    margin-left: 23%;
+    float: none;
+    height: 100%; }
+
+  #graph {
+    width: 90%;
+    margin: auto; }
+
+  .x.axis g:not(:nth-of-type(4n+1)):not(:nth-last-of-type(1)) {
+    display: none; }
+
+  .y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
+    display: none; }
+
+  footer {
+    margin-left: 38%; } }
+@media screen and (max-width: 700px) {
+  .left, .right {
+    float: none; }
+
+  .left {
+    margin-left: 28%; }
+
+  .right {
+    width: 62%;
+    margin-left: 18%; }
+
+  h1 {
+    font-size: 50px; }
+
+  #graph {
+    width: 100% !important; }
+
+  .x.axis g:not(:first-of-type):not(:last-of-type) {
+    display: none; }
+
+  .y.axis g:not(:first-of-type):not(:nth-of-type(9)) {
+    display: none; }
+
+  footer {
+    margin-left: 38%; } }
+@media screen and (max-width: 500px) {
+  #graph {
+    width: 100% !important; }
+
+  h1 {
+    font-size: 40px; }
+
+  h2 {
+    font-size: 16px; }
+
+  .sol {
+    font-size: 36px; }
+
+  .season {
+    font-size: 30px;
+    line-height: 5px; }
+
+  .weather {
+    font-size: 35px;
+    line-height: 2px;
+    letter-spacing: 4px; }
+
+  .temp_label {
+    font-size: 18px; }
+
+  .temp_data {
+    font-size: 16px; }
+
+  .left {
+    width: 75%;
+    margin-left: 12%; }
+
+  .graph_heading {
+    font-size: 20px; }
+
+  .graph_info {
+    font-size: 16px; }
+
+  .x.axis g:not(:first-of-type):not(:last-of-type),
+  .x.axis g.tick line {
+    display: none; }
+
+  .y.axis g:not(:first-of-type):not(:nth-of-type(9)),
+  .y.axis g.tick line {
+    display: none; }
+
+  footer {
+    margin-left: 31%; } }
 
 /*# sourceMappingURL=main.css.map */
