@@ -1,5 +1,3 @@
-@import 'bourbon/bourbon';
-@import 'neat/neat';
 @import url(http://fonts.googleapis.com/css?family=Allerta+Stencil|Bubbler+One|Text+Me+One);
 
 $space-blue: #011327;
@@ -9,18 +7,21 @@ $shadow-brown: #973603;
 $planet-red: #FF2700;
 $light-red: #FF907C; 
 
-$large-screen: new-breakpoint(max-width 1100px);
-$medium-screen: new-breakpoint(max-width 900px);
-$small-screen: new-breakpoint(max-width 700px);
-$smallest-screen: new-breakpoint(max-width 500px);
+$helvetica: "HelveticaNeue-Light", "Helvetica Neue Light", 
+			"Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$large-screen: "(min-width: 1100px)";
+$medium-screen: "(max-width: 900px)";
+$small-screen: "(max-width: 700px)";
+$smallest-screen: "(max-width: 500px)";
 
 /**** GLOBAL ****/
 body { 
 	margin: 0;
-	@outer-container($local-max-width: $max-width);
+	max-width: 100%;
 	font-family: $helvetica;
 	color: #fff;
-	background:$space-blue;
+	background: $space-blue;
 	overflow-x:hidden;
 }
 
@@ -122,8 +123,8 @@ header {
 	margin-bottom: 6%;
 	height: auto;
 	width: 125%;
-	border-radius: 45%;
-
+	border-top-right-radius: 45%;
+	border-top-left-radius: 45%
 }
 .left {
 	padding-top: 60px;
@@ -171,7 +172,7 @@ a:hover {
  }
 
  .chart_area text {
-  fill:white ;
+  fill: white ;
   font: 12px $helvetica, sans-serif;
 }
 
@@ -186,7 +187,6 @@ path {
 .max_line {
 	stroke: $light-red;
 }
-
 .min_label {
 	fill: $space-blue !important;
 }
@@ -223,7 +223,7 @@ path {
 	font-size: 20px;	
 }
 
-@include media($large-screen) {
+@media #{$large-screen} {
 	.x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
 		display:none;
 	}
@@ -233,7 +233,7 @@ path {
 	}
 }
 
-@include media($medium-screen) {
+@media #{$medium-screen} {
 	.left, .right {
 	float:none;
 	}
@@ -265,7 +265,7 @@ path {
 	}
 }
 
-@include media($small-screen) {
+@media #{$small-screen} {
 	.left, .right {
 	float:none;
 	}
@@ -294,7 +294,7 @@ path {
 	}
 }
 
-@include media($smallest-screen) {
+@media #{$smallest-screen} {
 
 	#graph {
 		width: 100% !important;
@@ -336,6 +336,7 @@ path {
 	.graph_info {
 		font-size: 16px;
 	}
+	
 	.x.axis g:not(:first-of-type):not(:last-of-type),
 	.x.axis g.tick line {
 		display:none;

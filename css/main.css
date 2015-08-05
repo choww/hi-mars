@@ -1,15 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Allerta+Stencil|Bubbler+One|Text+Me+One);
-html {
-  box-sizing: border-box; }
-
-*, *::after, *::before {
-  box-sizing: inherit; }
-
 /**** GLOBAL ****/
 body {
   margin: 0;
-  @outer-container ($local-max-width: $max-width);
-  font-family: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+  max-width: 100%;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #fff;
   background: #011327;
   overflow-x: hidden; }
@@ -92,7 +86,8 @@ header {
   margin-bottom: 6%;
   height: auto;
   width: 125%;
-  border-radius: 45%; }
+  border-top-right-radius: 45%;
+  border-top-left-radius: 45%; }
 
 .left {
   padding-top: 60px;
@@ -134,7 +129,7 @@ a:hover {
 
 .chart_area text {
   fill: white;
-  font: 12px "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif, sans-serif; }
+  font: 12px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif, sans-serif; }
 
 path {
   stroke-width: 2;
@@ -170,20 +165,20 @@ path {
   margin: auto; }
 
 .load-error {
-  background-color: #ff5d40;
+  background-color: tint(#FF2700, 25%);
   border: #FF2700 solid 1px;
   padding: 10px;
   text-align: center;
   margin: auto;
   font-size: 20px; }
 
-@media screen and (max-width: 1100px) {
+@media (min-width: 1100px) {
   .x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
     display: none; }
 
   .y.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
     display: none; } }
-@media screen and (max-width: 900px) {
+@media (max-width: 900px) {
   .left, .right {
     float: none; }
 
@@ -210,7 +205,7 @@ path {
 
   footer {
     margin-left: 38%; } }
-@media screen and (max-width: 700px) {
+@media (max-width: 700px) {
   .left, .right {
     float: none; }
 
@@ -235,7 +230,7 @@ path {
 
   footer {
     margin-left: 38%; } }
-@media screen and (max-width: 500px) {
+@media (max-width: 500px) {
   #graph {
     width: 100% !important; }
 

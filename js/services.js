@@ -43,7 +43,7 @@
 		return dates;
 	});
 
-	// adjust x and y axis as screen width changes. 
+	// adjust position of x and y axis and legend as screen width changes. 
 	services.factory("responsiveD3", function() {
 		var responsive = {};
 		responsive.width = document.getElementById("graph").clientWidth;
@@ -57,43 +57,54 @@
 		
 		var margin = responsive.margin;
 
-		responsive.scale = function(width, height, xAxis, yAxis) {	
+		responsive.scale = function(width, height, xAxis, yAxis, legend) {	
 			xAxis.selectAll("text")
 						.attr("dx", "2em")
 						.attr("dy", "1em")
 						.attr("transform", function(d) { return "rotate(-90)" });
-			xAxis.selectAll(".xAxis_label")
+			xAxis.select(".xAxis_label")
 						.attr("transform", "rotate(0)");
 
+			// horizontal position of legend labels 
+			function legend_pos(x_pos) {
+				for (var l = 0; l < legend.length; l++) {
+					legend[l].attr("x", x_pos);
+				}
+			};
 
 			if (width >= 500) {
-				xAxis.selectAll(".xAxis_label") 
+				xAxis.select(".xAxis_label") 
 					.attr("x", (width-margin.right) * 0.40)
 					.attr("y", -margin.top)
 
-				yAxis.selectAll(".yAxis_label")
-					.attr("x", -(height-margin.top) * 0.15)
-				  	.attr("y", -margin.left * 0.75);
+				yAxis.select(".yAxis_label")
+					.attr("x", -(height-margin.top) * 0.18)
+				  	.attr("y", -margin.left * 0.70);
+
+				legend_pos(width*0.67);
 			}
 			else if (width >= 400) {	
-				xAxis.selectAll(".xAxis_label") 
+				xAxis.select(".xAxis_label") 
 					.attr("x", (width - margin.right) * 0.40)
 					.attr("y", -margin.top * 0.90)
 					.attr("transform", "rotate(0)")
 
-				yAxis.selectAll(".yAxis_label")
+				yAxis.select(".yAxis_label")
 					.attr("x", -(height + margin.top)*0.05)
 					.attr("y", -margin.left * 0.80)
+
+				legend_pos(width*0.63);
 			}
 			else {		
-				xAxis.selectAll(".xAxis_label")
-					.attr("x", (width - margin.right) * 0.38)
-					.attr("y", -margin.top * 0.90)
+				xAxis.select(".xAxis_label")
+					.attr("x", (width - margin.right) * 0.37)
+					.attr("y", -margin.top * 0.90);
 
-				yAxis.selectAll(".yAxis_label")
+				yAxis.select(".yAxis_label")
 					.attr("x", -(height+margin.top)*0.05)
-					.attr("y", -margin.left * 0.72)
-		
+					.attr("y", -margin.left * 0.72);
+
+				legend_pos(width*0.54);
 			}
 		};
 		return responsive; 

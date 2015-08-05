@@ -67,12 +67,13 @@
 				// legend
 				var legend = chart.append("g")
 								  .attr("class", "legend");
+		
 				var max_label = legend.append("text")
 								  .attr("class", "max_label")
-								  .text("max temperature");
+								  .text("max temp");
 				var min_label = legend.append("text")
 								  .attr("class", "min_label")
-								  .text("min temperature");
+								  .text("min temp");
 				
 				// watch for changes to the div container 
 				scope.$watch(function(){
@@ -91,7 +92,7 @@
 					y.range([height - vpadding, 0]);
 
 					// from appServices
-					responsiveD3.scale(width, height, xAxis_add, yAxis_add);
+					responsiveD3.scale(width, height, xAxis_add, yAxis_add, [max_label, min_label]);
 
 				  	zero_line.attr("y1", y(-1))
 				  		.attr("y2", y(-1))
@@ -115,7 +116,7 @@
 					xAxis_add.call(xAxis);
 					yAxis_add.call(yAxis);
 
-					responsiveD3.scale(width, height, xAxis_add, yAxis_add);
+					responsiveD3.scale(width, height, xAxis_add, yAxis_add, [max_label, min_label]);
 
 					var max_line = d3.svg.line()
 									.x(function(d) { return x(d.sol); })
@@ -129,11 +130,10 @@
 						.attr("transform", "translate("+margin.left/6+")");
 					min_line_add.attr("d", min_line(data))
 						.attr("transform", "translate("+margin.left/6+")");
-														 
-					max_label.attr("x", width * 0.63)
-						  	 .attr("y", height/3);
-					min_label.attr("x", width * 0.63)
-						  	 .attr("y", height/2 + margin.bottom);
+					
+					// vertical position of legend text					 
+					max_label.attr("y", height/3)
+					min_label.attr("y", height/2 + margin.bottom);
 				};	
 			}
 		};

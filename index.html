@@ -29,9 +29,10 @@
 			<div class="right" ng-controller="graphController">
 					<div id="graph" ng-show="loaded === 1">
 					<p>
-						<div class="content graph_heading">Temperature (&deg;C) over time
+						<div class="content graph_heading">Maximum & Minimum temperature (&deg;C) over time
 						</div>
-						<div class="subheading graph_info">Based on data transmitted over 2 Earth months</div>
+						<div class="subheading graph_info">Based on data transmitted over 2 Earth months
+						</div>
 						<br>
 						<weather-graph data="agg_data"></weather-graph>
 					</div>
@@ -45,7 +46,7 @@
 		<script src="js/angular-route.min.js"></script>
 		<script src="js/d3.min.js"></script>
 		<script src="js/services.js"></script> 
-		<script src="js/app.js"></script>
+		<script src="js/weather.js"></script>
 		<script src="js/graph.js"></script> 
 		<script src="js/services.js"></script>
 	</body>
