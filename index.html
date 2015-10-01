@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html ng-app="marsWeather">	
+	<head>
+		<title>Meanwhile on Mars...</title>
+		<meta charset="UTF-8">
+
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+	</head>
+	
+	<body>
+	
+
+		<header>
+			<h1 class="heading">Hi Mars!</h1>
+			<h2 class="subheading">Weather data from the Curiosity Rover!</h2>
+		</header>
+		<div class="main">
+			<div class="left" ng-controller="weatherController">		
+				<div class="content" class="loading" ng-show="weather.loaded === 0">
+					Loading...
+				</div>
+				<div class="content load-error" ng-show="weather.loaded === 2">
+					Connection error: Please check your internet connection or refresh the page!
+				</div>	
+				<weather-data ng-show="weather.loaded === 1">
+				</weather-data>		
+			</div>
+			<div class="right" ng-controller="graphController">
+					<div id="graph" ng-show="loaded === 1">
+					<p>
+						<div class="content graph_heading">Maximum & Minimum temperature (&deg;C) over time
+						</div>
+						<div class="subheading graph_info">Based on data transmitted over 2 Earth months
+						</div>
+						<br>
+						<weather-graph data="agg_data"></weather-graph>
+					</div>
+			</div>
+			<footer>
+				Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
+			</footer>
+		</div>
+		
+		<script src="js/angular.min.js"></script>
+		<script src="js/angular-route.min.js"></script>
+		<script src="js/d3.min.js"></script>
+		<script src="js/services.js"></script> 
+		<script src="js/weather.js"></script>
+		<script src="js/graph.js"></script> 
+		<script src="js/services.js"></script>
+	</body>
+</HTML>
