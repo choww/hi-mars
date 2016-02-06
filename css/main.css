@@ -172,6 +172,7 @@ path {
   margin: auto;
   font-size: 20px; }
 
+/**** MEDIA QUERIES - LAPTOPS/DESKTOPS ****/
 @media (min-width: 1100px) {
   .x.axis g:nth-of-type(even):not(:nth-last-of-type(1)) {
     display: none; }
@@ -231,6 +232,55 @@ path {
   footer {
     margin-left: 38%; } }
 @media (max-width: 500px) {
+  #graph {
+    width: 100% !important; }
+
+  h1 {
+    font-size: 40px; }
+
+  h2 {
+    font-size: 16px; }
+
+  .sol {
+    font-size: 36px; }
+
+  .season {
+    font-size: 30px;
+    line-height: 5px; }
+
+  .weather {
+    font-size: 35px;
+    line-height: 2px;
+    letter-spacing: 4px; }
+
+  .temp_label {
+    font-size: 18px; }
+
+  .temp_data {
+    font-size: 16px; }
+
+  .left {
+    width: 75%;
+    margin-left: 12%; }
+
+  .graph_heading {
+    font-size: 20px; }
+
+  .graph_info {
+    font-size: 16px; }
+
+  .x.axis g:not(:first-of-type):not(:last-of-type),
+  .x.axis g.tick line {
+    display: none; }
+
+  .y.axis g:not(:first-of-type):not(:nth-of-type(9)),
+  .y.axis g.tick line {
+    display: none; }
+
+  footer {
+    margin-left: 31%; } }
+/**** MEDIA QUERIES - MOBILE ****/
+@media only screen and (max-device-width: 360px) {
   #graph {
     width: 100% !important; }
 
