@@ -33,8 +33,9 @@
 		if (day < 10) {
 			day = '0' + day;
 		}
-		if (two_mnths < 10  | month < 10) {
-			two_mnths = '0' + two_mnths;
+
+		if (two_mnths < 10) {
+            two_mnths = '0' + two_mnths;
 		}
 		if (month < 10) {
 			month = '0' + month;
