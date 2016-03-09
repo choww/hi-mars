@@ -2,31 +2,31 @@
 	var app = angular.module('marsWeather', ['ngRoute', 'appServices', 'weatherGraph']);
 	
 	// enable CORS
-	app.config(['$httpProvider', function($httpProvider) {
-		$httpProvider.defaults.useXDomain = true;
-		delete $httpProvider.defaults.headers.common['X-Requested-With'];
-	}]);
+  // app.config(['$httpProvider', function($httpProvider) {
+  //		$httpProvider.defaults.useXDomain = true;
+  //		delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  // }]);
 
 	// weather data display
 	app.directive('weatherData', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/weather-data.html'
-		}
+		};
 	});
 	// celsius-fahrenheit temperature display
 	app.directive('tempUnits', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/temp-units.html'
-		}
+		};
 	});
 	// displays season in the north/south based on Ls
 	app.directive('season', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'templates/season.html'
-		}
+		};
 	});
 
 	// controllers
@@ -70,7 +70,7 @@
 		// keep track of whether API data loaded or not
 		$scope.weather.loaded = 0;
 
-		var api_url = 'http://marsweather.ingenology.com/v1/latest/?format=jsonp&callback=JSON_CALLBACK'
+		var api_url = 'http://marsweather.ingenology.com/v1/latest/?format=jsonp&callback=JSON_CALLBACK';
 
 		function getWeather() {
 			APIService.getData(api_url).success(function(data) {

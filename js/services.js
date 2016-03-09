@@ -6,9 +6,8 @@
 		var api_url;
 		var data = {};
 		data.getData = function(url) {
-			
 			return $http.jsonp(url);
-		}
+		};
 		return data; 
 	});
 		
@@ -53,7 +52,7 @@
 			height = responsive.height;
 
 		responsive.margin = { top: 0.35*height, right: 0.05*width, 		
-							  bottom: 0.05*height, left: 0.11*width }
+							  bottom: 0.05*height, left: 0.11*width };
 		
 		var margin = responsive.margin;
 
@@ -61,7 +60,7 @@
 			xAxis.selectAll("text")
 						.attr("dx", "2em")
 						.attr("dy", "1em")
-						.attr("transform", function(d) { return "rotate(-90)" });
+						.attr("transform", function(d) { return "rotate(-90)"; });
 			xAxis.select(".xAxis_label")
 						.attr("transform", "rotate(0)");
 
@@ -70,12 +69,12 @@
 				for (var l = 0; l < legend.length; l++) {
 					legend[l].attr("x", x_pos);
 				}
-			};
+			}
 
 			if (width >= 500) {
 				xAxis.select(".xAxis_label") 
 					.attr("x", (width-margin.right) * 0.40)
-					.attr("y", -margin.top)
+					.attr("y", -margin.top);
 
 				yAxis.select(".yAxis_label")
 					.attr("x", -(height-margin.top) * 0.18)
@@ -87,11 +86,11 @@
 				xAxis.select(".xAxis_label") 
 					.attr("x", (width - margin.right) * 0.40)
 					.attr("y", -margin.top * 0.90)
-					.attr("transform", "rotate(0)")
+					.attr("transform", "rotate(0)");
 
 				yAxis.select(".yAxis_label")
 					.attr("x", -(height + margin.top)*0.05)
-					.attr("y", -margin.left * 0.80)
+					.attr("y", -margin.left * 0.80);
 
 				legend_pos(width*0.63);
 			}

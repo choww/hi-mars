@@ -18,7 +18,7 @@
 				// create the graph area 
 				var chart_area = d3.select(element[0])
 								.append("svg")
-								.attr("class", "chart_area")
+								.attr("class", "chart_area");
 				// offset the actual area where the data goes to make room for x & y axes
 				var chart = chart_area.append("g")
 								.attr("transform", "translate("+margin.left+","+margin.top+")");
@@ -40,14 +40,14 @@
 								.orient("left");	
 				var xAxis_add = chart.append("g")
 					  	.attr("class", "x axis")
-					  	.call(xAxis)
+					  	.call(xAxis);
 				var yAxis_add = chart.append("g")
-								  	.attr("class", "y axis")
+								  	.attr("class", "y axis");
 								  	
 				// axis labels & zero line 
 				xAxis_add.append("text")
 					.text("Sol")
-					.attr("class", "xAxis_label")
+					.attr("class", "xAxis_label");
 				yAxis_add.append("text")
 					.attr("class", "yAxis_label")
 					.attr("transform", "rotate(-90)")
@@ -57,7 +57,7 @@
 				var zero_line = yAxis_add.append("line")
 					.attr("id", "zero-line")
 			  		.attr("x1", 0)
-					.attr("stroke-dasharray", "8,8")
+					.attr("stroke-dasharray", "8,8");
 
 				// set up the data lines 
 				var min_line_add = chart.append("path")
@@ -78,7 +78,7 @@
 				// watch for changes to the div container 
 				scope.$watch(function(){
 					// get new width & height
-					width = document.getElementById("graph").clientWidth,
+					width = document.getElementById("graph").clientWidth;
 					height = d3.max([width * 0.35, 170]);
 					return width + height;
 				}, resize);
@@ -86,9 +86,9 @@
 
 				function resize() {
 					chart_area.attr("width", width)
-					    .attr("height", height)
+					    .attr("height", height);
 
-					x.rangeBands([0, (width - hpadding)], 0.05)
+					x.rangeBands([0, (width - hpadding)], 0.05);
 					y.range([height - vpadding, 0]);
 
 					// from appServices
@@ -98,13 +98,13 @@
 				  		.attr("y2", y(-1))
 				  		.attr("x2", width - hpadding);
 					updateGraph();
-				};			
+				}			
 
 				scope.$watch('data', updateGraph);
 
 				function updateGraph() {
 					data = scope.data;
-					if (!data) { return };
+					if (!data) { return; }
 		    		// min y-axis value and x-axis values--have to reverse the list so data is displayed in the correct order
 		    		var ymin = d3.min(data.map(function(d) { return d.min_temp; }).reverse());
 		    		var xval = data.map(function(d) { return d.sol; }).reverse();
@@ -120,7 +120,7 @@
 
 					var max_line = d3.svg.line()
 									.x(function(d) { return x(d.sol); })
-									.y(function(d) { return y(d.max_temp); })
+									.y(function(d) { return y(d.max_temp); });
 					var min_line = d3.svg.line()
 								.x(function(d) { return x(d.sol); })
 								.y(function(d) { return y(d.min_temp); });
@@ -132,9 +132,9 @@
 						.attr("transform", "translate("+margin.left/6+")");
 					
 					// vertical position of legend text					 
-					max_label.attr("y", height/3)
+					max_label.attr("y", height/3);
 					min_label.attr("y", height/2 + margin.bottom);
-				};	
+				}	
 			}
 		};
 	});
@@ -151,7 +151,7 @@
 			var api_url = "http://marsweather.ingenology.com/v1/archive/?page="+num+"&terrestrial_date_end="+dateService.today+"&terrestrial_date_start="+dateService.two_mnths_earlier+"&format=jsonp&callback=JSON_CALLBACK";
 			calls.push(APIService.getData(api_url));
 			$scope.loaded = 1;
-		};
+		}
 
 		$q.all(calls).then(function(result) {
 			var results = [];
@@ -159,10 +159,10 @@
 				angular.forEach(rrr, function(rr) {
 					angular.forEach(rr.results, function(r) {
 						results.push({sol: r.sol, min_temp: r.min_temp, max_temp: r.max_temp});
-					})
-				})
+					});
+				});
 			});
-			$scope.agg_data = results
+			$scope.agg_data = results;
 			return $scope.agg_data;
 		});
 	});
