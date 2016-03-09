@@ -5,6 +5,7 @@
 	graph.directive ('weatherGraph', function(responsiveD3) {
 		return {
 			restrict: 'E',
+      controller: 'graphController',
 			scope: {
 				data: '=data'
 			},
@@ -83,7 +84,6 @@
 					return width + height;
 				}, resize);
 
-
 				function resize() {
 					chart_area.attr("width", width)
 					    .attr("height", height)
@@ -98,18 +98,19 @@
 				  		.attr("y2", y(-1))
 				  		.attr("x2", width - hpadding);
 					updateGraph();
-				};			
+				}
 
 				scope.$watch('data', updateGraph);
 
 				function updateGraph() {
 					data = scope.data;
 					if (!data) { return };
-		    		// min y-axis value and x-axis values--have to reverse the list so data is displayed in the correct order
-		    		var ymin = d3.min(data.map(function(d) { return d.min_temp; }).reverse());
-		    		var xval = data.map(function(d) { return d.sol; }).reverse();
+
+		  		// min y-axis value and x-axis values--have to reverse the list so data is displayed in the correct order
+		   		var ymin = d3.min(data.map(function(d) { return d.min_temp; }).reverse());
+		   		var xval = data.map(function(d) { return d.sol; }).reverse();
 		    		
-		    		// set values for x and y axis
+		    	// set values for x and y axis
 					y.domain([ymin, 10]).nice();	
 					x.domain(xval);
 
@@ -134,9 +135,9 @@
 					// vertical position of legend text					 
 					max_label.attr("y", height/3)
 					min_label.attr("y", height/2 + margin.bottom);
-				};	
+				}	
 			}
-		};
+		}
 	});
 
 	graph.controller("graphController", function($scope, $q, $window, APIService, dateService) {
@@ -144,6 +145,26 @@
 
 		$scope.agg_data = {};
 		$scope.loaded = 0;
+
+    // graph temperature in celsius or fahrenheit
+    $scope.graphTempUnit = function(unit) {
+     // ymin & yAxis label
+     // max_line & min_line 
+      console.log($scope.agg_data);
+      if (unit === 'fahrenheit') {
+        $scope.agg_data.forEach(function(data) {
+          // but how to change it back?
+          data.min_temp = data.min_temp_f;
+          data.max_temp = data.max_temp_f;
+        });
+        return $scope.agg_data;
+      } 
+      else {
+        $scope.agg_data.forEach(function(data) {
+          
+        });
+      }
+    }
 
 		// combine data from multiple API calls into one aggregate data set.
 		var calls = [];
@@ -158,7 +179,10 @@
 			angular.forEach(result, function(rrr) {
 				angular.forEach(rrr, function(rr) {
 					angular.forEach(rr.results, function(r) {
-						results.push({sol: r.sol, min_temp: r.min_temp, max_temp: r.max_temp});
+              
+						results.push({
+              sol: r.sol, min_temp: r.min_temp, max_temp: r.max_temp,
+              min_temp_f: r.min_temp_fahrenheit, max_temp_f: r.max_temp_fahrenheit});
 					})
 				})
 			});

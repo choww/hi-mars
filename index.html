@@ -2,15 +2,12 @@
 <html ng-app="marsWeather">	
 	<head>
 		<title>Meanwhile on Mars...</title>
-		<meta charset="UTF-8">
-
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-
+		<meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+	  <link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	
 	<body>
-	
-
 		<header>
 			<h1 class="heading">Hi Mars!</h1>
 			<h2 class="subheading">Weather data from the Curiosity Rover!</h2>
@@ -27,15 +24,21 @@
 				</weather-data>		
 			</div>
 			<div class="right" ng-controller="graphController">
-					<div id="graph" ng-show="loaded === 1">
-					<p>
-						<div class="content graph_heading">Maximum & Minimum temperature (&deg;C) over time
-						</div>
-						<div class="subheading graph_info">Based on data transmitted over 2 Earth months
-						</div>
-						<br>
-						<weather-graph data="agg_data"></weather-graph>
-					</div>
+				<div id="graph" ng-show="loaded === 1">
+          <p>
+            <div class="content graph_heading">
+              Maximum & Minimum temperature 
+              (<a href ng-click="graphTempUnit('celsius')">&deg;C</a> |
+               <a href ng-click="graphTempUnit('fahrenheit')">&deg;F</a>) 
+              over time
+            </div>
+
+            <div class="subheading graph_info">
+              Based on data transmitted over 2 Earth months
+            </div>
+					</p>
+					<weather-graph data="agg_data"></weather-graph>
+				</div>
 			</div>
 			<footer>
 				Built with the <a href="http://marsweather.ingenology.com" target="_blank">{MAAS} API</a>
